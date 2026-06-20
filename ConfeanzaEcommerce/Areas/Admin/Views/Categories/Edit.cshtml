@@ -1,0 +1,63 @@
+@model Category
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-outline-secondary btn-sm mb-4">
+    <i class="bi bi-arrow-left"></i> Back
+</a>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-bold">Edit: @Model.Name</div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="Categories" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label fw-semibold">Category Name *</label>
+                    <input name="Name" class="form-control" value="@Model.Name" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Sort Order</label>
+                    <input name="SortOrder" type="number" class="form-control" value="@Model.SortOrder" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="Description" class="form-control" rows="3">@Model.Description</textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Icon URL</label>
+                    <input name="IconUrl" class="form-control" value="@Model.IconUrl" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Image URL</label>
+                    <input name="ImageUrl" class="form-control" value="@Model.ImageUrl" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Meta Title</label>
+                    <input name="MetaTitle" class="form-control" value="@Model.MetaTitle" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Meta Description</label>
+                    <input name="MetaDescription" class="form-control" value="@Model.MetaDescription" />
+                </div>
+                <div class="col-12">
+                    <div class="d-flex gap-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="IsActive" value="true" @(Model.IsActive ? "checked" : "") />
+                            <label class="form-check-label fw-semibold">Active</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="IsFeatured" value="true" @(Model.IsFeatured ? "checked" : "") />
+                            <label class="form-check-label fw-semibold">Featured</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-circle me-1"></i> Save</button>
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

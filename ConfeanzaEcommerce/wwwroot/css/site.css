@@ -1,0 +1,145 @@
+/* ── Pink & White Theme ──────────────────────────────────── */
+:root {
+    --pink:          #ec4899;
+    --pink-dark:     #be185d;
+    --pink-deeper:   #9d174d;
+    --pink-light:    #fce7f3;
+    --pink-xlight:   #fdf2f8;
+    --white:         #ffffff;
+    --text-dark:     #1f2937;
+    --sidebar-bg:    #831843;
+}
+
+/* Bootstrap primary overrides → Pink */
+.btn-primary            { background-color: var(--pink);      border-color: var(--pink); color: #fff; }
+.btn-primary:hover      { background-color: var(--pink-dark); border-color: var(--pink-dark); color: #fff; }
+.btn-outline-primary    { color: var(--pink); border-color: var(--pink); background: transparent; }
+.btn-outline-primary:hover { background-color: var(--pink); border-color: var(--pink); color: #fff; }
+.bg-primary             { background-color: var(--pink) !important; }
+.text-primary           { color: var(--pink) !important; }
+.border-primary         { border-color: var(--pink) !important; }
+.badge.bg-primary       { background-color: var(--pink) !important; }
+
+/* Info → soft pink tint */
+.badge.bg-info          { background-color: #fce7f3 !important; color: var(--pink-dark) !important; }
+.btn-outline-info       { color: var(--pink); border-color: var(--pink); }
+.btn-outline-info:hover { background-color: var(--pink); color: #fff; }
+
+/* Warning → keep warm for "deal" badges */
+.btn-warning            { background-color: #f97316; border-color: #f97316; color: #fff; font-weight: 600; }
+.btn-warning:hover      { background-color: #ea580c; border-color: #ea580c; color: #fff; }
+.badge.bg-warning       { background-color: #f97316 !important; color: #fff !important; }
+
+/* Focus ring */
+.btn:focus, .form-control:focus, .form-select:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.18rem rgba(236,72,153,.25);
+    border-color: var(--pink) !important;
+    outline: none;
+}
+
+/* ── Navbar brand ── */
+.navbar-brand {
+    background: linear-gradient(90deg, var(--pink-dark), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+/* ── Top bar ── */
+.topbar {
+    background: linear-gradient(90deg, var(--pink-deeper), var(--pink));
+}
+
+/* ── Hero ── */
+.hero-banner {
+    background: linear-gradient(135deg, var(--pink-deeper) 0%, var(--pink-dark) 45%, var(--pink) 100%) !important;
+    position: relative;
+    overflow: hidden;
+}
+.hero-banner::before {
+    content: '';
+    position: absolute;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+    top: -180px; right: -100px;
+    pointer-events: none;
+}
+.hero-banner::after {
+    content: '';
+    position: absolute;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.05);
+    bottom: -130px; left: -80px;
+    pointer-events: none;
+}
+
+/* ── Section title underline ── */
+h2.section-title { position: relative; display: inline-block; }
+h2.section-title::after {
+    content: '';
+    display: block;
+    width: 55px; height: 3px;
+    background: linear-gradient(90deg, var(--pink), #f9a8d4);
+    border-radius: 2px;
+    margin-top: 6px;
+}
+
+/* ── Card hover ── */
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 28px rgba(236,72,153,.18) !important;
+}
+
+/* ── Coupon code ── */
+.coupon-code {
+    font-family: monospace;
+    background: var(--pink-light);
+    border: 2px dashed var(--pink);
+    border-radius: 6px;
+    padding: 4px 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--pink-dark);
+}
+
+/* ── Pagination ── */
+.page-item.active .page-link { background-color: var(--pink); border-color: var(--pink); }
+.page-link         { color: var(--pink); }
+.page-link:hover   { color: var(--pink-dark); background: var(--pink-light); }
+
+/* ── Admin sidebar ── */
+.admin-sidebar {
+    background: linear-gradient(180deg, var(--sidebar-bg) 0%, #be185d 100%);
+    width: 240px; min-height: 100vh;
+}
+.admin-sidebar .sidebar-brand { color: #fff; font-size: 1.15rem; font-weight: 700; }
+.admin-sidebar .nav-link      { color: #fbcfe8; border-radius: 6px; transition: all .2s; padding: .5rem .75rem; }
+.admin-sidebar .nav-link:hover { color: #fff; background: rgba(255,255,255,.18); }
+.admin-sidebar .nav-link.active-link { color: #fff; background: rgba(255,255,255,.22); border-left: 3px solid #fff; }
+.admin-sidebar .sidebar-divider { border-color: rgba(255,255,255,.2); }
+
+/* ── Admin top area ── */
+.admin-topbar { background: #fff; border-bottom: 2px solid var(--pink-light); }
+.admin-main   { background: var(--pink-xlight); flex: 1; padding: 24px; min-height: 100vh; }
+
+/* ── Footer ── */
+footer.site-footer { background: #3b0a25; }
+footer.site-footer a:hover { color: #f9a8d4 !important; }
+
+/* ── Misc ── */
+.border-dashed  { border-style: dashed !important; }
+.hover-bg:hover { background: var(--pink-light); }
+.blog-content img { max-width: 100%; border-radius: 8px; }
+
+html { font-size: 14px; position: relative; min-height: 100%; }
+body { margin-bottom: 0; }
+@media (min-width: 768px) { html { font-size: 16px; } }

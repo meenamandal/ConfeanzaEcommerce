@@ -1,0 +1,88 @@
+@model Blog
+@{
+    ViewData["Title"] = "Write Blog Post";
+}
+
+<a asp-area="Admin" asp-controller="Blogs" asp-action="Index" class="btn btn-outline-secondary btn-sm mb-4">
+    <i class="bi bi-arrow-left"></i> Back
+</a>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="Blogs" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Title *</label>
+                    <input name="Title" class="form-control form-control-lg" required placeholder="Blog post title..." />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Category</label>
+                    <input name="Category" class="form-control" placeholder="e.g. Reviews, Tips, Deals" list="blogCats" />
+                    <datalist id="blogCats">
+                        <option value="Reviews" />
+                        <option value="Buying Guide" />
+                        <option value="Deals" />
+                        <option value="Tips & Tricks" />
+                        <option value="Comparison" />
+                        <option value="News" />
+                    </datalist>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="Status" class="form-select">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Read Time (minutes)</label>
+                    <input name="ReadTime" type="number" class="form-control" placeholder="e.g. 5" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Excerpt</label>
+                    <textarea name="Excerpt" class="form-control" rows="2" placeholder="Short description shown in listing..."></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Cover Image URL</label>
+                    <input name="CoverImage" class="form-control" placeholder="https://..." id="coverImgInput" oninput="previewCover(this.value)" />
+                    <img id="coverPreview" src="" class="mt-2 img-fluid rounded" style="max-height:150px;display:none;" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Content *</label>
+                    <textarea name="Content" class="form-control" rows="20" id="contentEditor" required
+                              placeholder="Write your blog content here... You can use HTML tags."></textarea>
+                    <small class="text-muted">You can use HTML for formatting: &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;ul&gt;, etc.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Meta Title (SEO)</label>
+                    <input name="MetaTitle" class="form-control" placeholder="SEO title" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Meta Description (SEO)</label>
+                    <input name="MetaDescription" class="form-control" placeholder="SEO description" />
+                </div>
+                <div class="col-12 d-flex gap-4">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="IsFeatured" value="true" />
+                        <label class="form-check-label fw-semibold">Featured Post</label>
+                    </div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Save Post</button>
+                    <a asp-area="Admin" asp-controller="Blogs" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function previewCover(url) {
+    var img = document.getElementById('coverPreview');
+    if (url) { img.src = url; img.style.display = 'block'; }
+    else { img.style.display = 'none'; }
+}
+</script>
+}

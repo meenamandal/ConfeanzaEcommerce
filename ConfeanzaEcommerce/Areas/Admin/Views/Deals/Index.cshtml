@@ -1,0 +1,58 @@
+@model List<Deal>
+@{
+    ViewData["Title"] = "Deals";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-2"></i>@TempData["Success"]<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="text-muted mb-0">@Model.Count deals</p>
+    <a asp-area="Admin" asp-controller="Deals" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Add Deal
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Title</th><th>Store</th><th>Type</th><th>Discount</th><th>Expires</th><th>Active</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var deal in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold" style="max-width:250px;">
+                            <span style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">@deal.Title</span>
+                        </td>
+                        <td><small class="text-muted">@(deal.Store?.Name ?? "-")</small></td>
+                        <td><span class="badge bg-secondary">@deal.DealType.Replace("_"," ")</span></td>
+                        <td>@(deal.DiscountPercent.HasValue ? deal.DiscountPercent + "%" : "-")</td>
+                        <td>
+                            @if (deal.ExpiresAt.HasValue)
+                            {
+                                var expired = deal.ExpiresAt < DateTime.UtcNow;
+                                <small class="@(expired ? "text-danger" : "text-muted")">@deal.ExpiresAt.Value.ToString("MMM dd, yyyy")</small>
+                            }
+                            else { <small class="text-success">No Expiry</small> }
+                        </td>
+                        <td><span class="badge @(deal.IsActive ? "bg-success" : "bg-secondary")">@(deal.IsActive ? "Active" : "Off")</span></td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Deals" asp-action="Edit" asp-route-id="@deal.Id"
+                               class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form asp-area="Admin" asp-controller="Deals" asp-action="Delete" method="post" class="d-inline"
+                                  onsubmit="return confirm('Delete this deal?')">
+                                <input type="hidden" name="id" value="@deal.Id" />
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

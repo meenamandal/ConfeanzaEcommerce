@@ -1,0 +1,61 @@
+@model List<Coupon>
+@{
+    ViewData["Title"] = "Coupons";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-2"></i>@TempData["Success"]<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="text-muted mb-0">@Model.Count coupons</p>
+    <a asp-area="Admin" asp-controller="Coupons" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Add Coupon
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Code</th><th>Title</th><th>Store</th><th>Type</th><th>Value</th><th>Expires</th><th>Verified</th><th>Active</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td><code class="bg-light px-2 py-1 rounded">@c.Code</code></td>
+                        <td style="max-width:200px;"><small>@c.Title</small></td>
+                        <td><small class="text-muted">@(c.Store?.Name ?? "-")</small></td>
+                        <td><span class="badge bg-info text-dark">@c.Type</span></td>
+                        <td>
+                            @if (c.Type == "percentage") { <strong>@c.DiscountValue%</strong> }
+                            else if (c.Type == "flat") { <strong>₹@c.DiscountValue.ToString("N0")</strong> }
+                            else { <span>-</span> }
+                        </td>
+                        <td>
+                            @if (c.ExpiresAt.HasValue)
+                            {
+                                var expired = c.ExpiresAt < DateTime.UtcNow;
+                                <small class="@(expired ? "text-danger" : "text-muted")">@c.ExpiresAt.Value.ToString("MMM dd, yy")</small>
+                            }
+                        </td>
+                        <td>@if (c.IsVerified) { <i class="bi bi-patch-check-fill text-success"></i> }</td>
+                        <td><span class="badge @(c.IsActive ? "bg-success" : "bg-secondary")">@(c.IsActive ? "On" : "Off")</span></td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Coupons" asp-action="Edit" asp-route-id="@c.Id"
+                               class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form asp-area="Admin" asp-controller="Coupons" asp-action="Delete" method="post" class="d-inline"
+                                  onsubmit="return confirm('Delete coupon @c.Code?')">
+                                <input type="hidden" name="id" value="@c.Id" />
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

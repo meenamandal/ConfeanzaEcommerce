@@ -1,0 +1,97 @@
+@model Product
+@{
+    ViewData["Title"] = "Edit Product";
+    var categories = ViewBag.Categories as List<Category> ?? new();
+    var brands = ViewBag.Brands as List<Brand> ?? new();
+}
+
+<div class="d-flex gap-2 mb-4">
+    <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+    <a asp-area="Admin" asp-controller="AffiliateLinks" asp-action="Index" asp-route-productId="@Model.Id"
+       class="btn btn-warning btn-sm">
+        <i class="bi bi-currency-rupee"></i> Manage Prices (@Model.AffiliateLinks?.Count ?? 0)
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-bold">Edit: @Model.Name</div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label fw-semibold">Product Name *</label>
+                    <input name="Name" class="form-control" value="@Model.Name" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="Status" class="form-select">
+                        <option value="draft" selected="@(Model.Status == "draft")">Draft</option>
+                        <option value="published" selected="@(Model.Status == "published")">Published</option>
+                        <option value="archived" selected="@(Model.Status == "archived")">Archived</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">SKU</label>
+                    <input name="Sku" class="form-control" value="@Model.Sku" placeholder="Optional SKU" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Category</label>
+                    <select name="CategoryId" class="form-select">
+                        <option value="">-- No Category --</option>
+                        @foreach (var c in categories)
+                        {
+                            <option value="@c.Id" selected="@(Model.CategoryId == c.Id)">@c.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Brand</label>
+                    <select name="BrandId" class="form-select">
+                        <option value="">-- No Brand --</option>
+                        @foreach (var b in brands)
+                        {
+                            <option value="@b.Id" selected="@(Model.BrandId == b.Id)">@b.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Short Description</label>
+                    <input name="ShortDescription" class="form-control" value="@Model.ShortDescription" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Full Description</label>
+                    <textarea name="Description" class="form-control" rows="6" id="descEditor">@Model.Description</textarea>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex gap-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="IsFeatured" value="true" @(Model.IsFeatured ? "checked" : "") />
+                            <label class="form-check-label fw-semibold">Featured</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="IsTrending" value="true" @(Model.IsTrending ? "checked" : "") />
+                            <label class="form-check-label fw-semibold">Trending</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="IsDealOfDay" value="true" @(Model.IsDealOfDay ? "checked" : "") />
+                            <label class="form-check-label fw-semibold">Deal of the Day</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-check-circle me-1"></i> Save Changes
+                    </button>
+                    <a asp-area="Admin" asp-controller="AffiliateLinks" asp-action="Index" asp-route-productId="@Model.Id"
+                       class="btn btn-warning">
+                        <i class="bi bi-currency-rupee me-1"></i> Manage Prices
+                    </a>
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

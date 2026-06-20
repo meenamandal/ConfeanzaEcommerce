@@ -1,0 +1,206 @@
+@model ProductDetailViewModel
+@{
+    ViewData["Title"] = Model.Product.Name;
+    var primaryImg = Model.Product.Images.FirstOrDefault(i => i.IsPrimary) ?? Model.Product.Images.FirstOrDefault();
+}
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Products" asp-action="Index">Products</a></li>
+            @if (Model.Product.Category != null)
+            {
+                <li class="breadcrumb-item"><a asp-controller="Categories" asp-action="Details" asp-route-slug="@Model.Product.Category.Slug">@Model.Product.Category.Name</a></li>
+            }
+            <li class="breadcrumb-item active">@Model.Product.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Images -->
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm p-3">
+                @if (primaryImg != null)
+                {
+                    <img src="@primaryImg.Url" alt="@Model.Product.Name" class="img-fluid" style="max-height:400px;object-fit:contain;" />
+                }
+                else
+                {
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height:400px;">
+                        <i class="bi bi-image text-muted display-1"></i>
+                    </div>
+                }
+                @if (Model.Product.Images.Count > 1)
+                {
+                    <div class="d-flex gap-2 mt-3 overflow-auto">
+                        @foreach (var img in Model.Product.Images.Take(6))
+                        {
+                            <img src="@img.Url" alt="" class="border rounded" style="width:60px;height:60px;object-fit:contain;cursor:pointer;" />
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-md-7">
+            @if (Model.Product.Brand != null)
+            {
+                <span class="badge bg-primary mb-2">@Model.Product.Brand.Name</span>
+            }
+            <h1 class="h3 fw-bold">@Model.Product.Name</h1>
+
+            @if (Model.Product.AvgRating > 0)
+            {
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div class="text-warning">
+                        @for (int s = 1; s <= 5; s++)
+                        {
+                            <i class="bi bi-star@(s <= (int)Model.Product.AvgRating ? "-fill" : (decimal)(s - 0.5) <= Model.Product.AvgRating ? "-half" : "")"></i>
+                        }
+                    </div>
+                    <span class="text-muted">@Model.Product.AvgRating.ToString("F1") (@Model.Product.ReviewCount reviews)</span>
+                </div>
+            }
+
+            @if (Model.BestPrice != null)
+            {
+                <div class="mb-3">
+                    <span class="display-6 fw-bold text-success">₹@Model.BestPrice.Price?.ToString("N0")</span>
+                    @if (Model.BestPrice.Mrp.HasValue && Model.BestPrice.Mrp > Model.BestPrice.Price)
+                    {
+                        <span class="text-muted text-decoration-line-through ms-2 fs-5">₹@Model.BestPrice.Mrp.Value.ToString("N0")</span>
+                        <span class="badge bg-success ms-2 fs-6">@((int)((1 - Model.BestPrice.Price / Model.BestPrice.Mrp) * 100))% OFF</span>
+                    }
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Product.ShortDescription))
+            {
+                <p class="text-muted">@Model.Product.ShortDescription</p>
+            }
+
+            <!-- Price Comparison -->
+            @if (Model.AffiliateLinks.Any())
+            {
+                <h5 class="fw-bold mt-4 mb-3"><i class="bi bi-bar-chart-line text-primary"></i> Compare Prices</h5>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        @foreach (var link in Model.AffiliateLinks.Where(a => a.IsActive && a.InStock).OrderBy(a => a.Price))
+                        {
+                            <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+                                <div>
+                                    <strong>@link.Store?.Name</strong>
+                                    @if (!link.InStock)
+                                    {
+                                        <span class="badge bg-secondary ms-2">Out of Stock</span>
+                                    }
+                                </div>
+                                <div class="d-flex align-items-center gap-3">
+                                    @if (link.Price.HasValue)
+                                    {
+                                        <span class="fw-bold text-success fs-5">₹@link.Price.Value.ToString("N0")</span>
+                                    }
+                                    <a href="@link.AffiliateUrl" target="_blank" rel="nofollow noopener"
+                                       class="btn btn-warning btn-sm fw-semibold">
+                                        Buy Now <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Description & Specs -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="productTabs">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc">Description</button></li>
+                @if (Model.Product.Specifications.Any())
+                {
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#specs">Specifications</button></li>
+                }
+                @if (Model.Reviews.Any())
+                {
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews">Reviews (@Model.Reviews.Count)</button></li>
+                }
+            </ul>
+            <div class="tab-content border border-top-0 p-4">
+                <div class="tab-pane fade show active" id="desc">
+                    @if (!string.IsNullOrEmpty(Model.Product.Description))
+                    {
+                        <div>@Html.Raw(Model.Product.Description)</div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No description available.</p>
+                    }
+                </div>
+                @if (Model.Product.Specifications.Any())
+                {
+                    <div class="tab-pane fade" id="specs">
+                        @foreach (var group in Model.Product.Specifications.GroupBy(s => s.GroupName))
+                        {
+                            <h6 class="fw-bold mt-3">@group.Key</h6>
+                            <table class="table table-bordered table-sm">
+                                @foreach (var spec in group)
+                                {
+                                    <tr><th class="w-40 bg-light">@spec.SpecKey</th><td>@spec.SpecValue @spec.Unit</td></tr>
+                                }
+                            </table>
+                        }
+                    </div>
+                }
+                @if (Model.Reviews.Any())
+                {
+                    <div class="tab-pane fade" id="reviews">
+                        @foreach (var review in Model.Reviews.Take(10))
+                        {
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="text-warning small">
+                                    @for (int s = 1; s <= 5; s++) { <i class="bi bi-star@(s <= review.Rating ? "-fill" : "")"></i> }
+                                </div>
+                                @if (!string.IsNullOrEmpty(review.Title)) { <strong>@review.Title</strong> }
+                                @if (!string.IsNullOrEmpty(review.Body)) { <p class="text-muted small mt-1 mb-0">@review.Body</p> }
+                                <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    @if (Model.RelatedProducts.Any())
+    {
+        <div class="mt-5">
+            <h4 class="fw-bold mb-3">Related Products</h4>
+            <div class="row g-3">
+                @foreach (var rp in Model.RelatedProducts)
+                {
+                    var rpImg = rp.Images.FirstOrDefault(i => i.IsPrimary) ?? rp.Images.FirstOrDefault();
+                    var rpPrice = rp.AffiliateLinks.Where(a => a.IsActive && a.Price.HasValue).OrderBy(a => a.Price).FirstOrDefault();
+                    <div class="col-6 col-md-2">
+                        <a asp-controller="Products" asp-action="Details" asp-route-slug="@rp.Slug" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100 card-hover text-center">
+                                @if (rpImg != null)
+                                {
+                                    <img src="@rpImg.Url" class="card-img-top p-2" alt="@rp.Name" style="height:100px;object-fit:contain;" />
+                                }
+                                <div class="card-body p-2">
+                                    <p class="small text-dark mb-1 lh-sm" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">@rp.Name</p>
+                                    @if (rpPrice != null) { <span class="fw-bold text-success small">₹@rpPrice.Price?.ToString("N0")</span> }
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

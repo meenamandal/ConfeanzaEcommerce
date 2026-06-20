@@ -1,0 +1,57 @@
+@model List<Blog>
+@{
+    ViewData["Title"] = "Blog Posts";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-2"></i>@TempData["Success"]<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="text-muted mb-0">@Model.Count posts</p>
+    <a asp-area="Admin" asp-controller="Blogs" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-pencil-square me-1"></i> Write Post
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Title</th><th>Category</th><th>Status</th><th>Views</th><th>Published</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var blog in Model)
+                {
+                    <tr>
+                        <td style="max-width:300px;">
+                            <span class="fw-semibold" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">@blog.Title</span>
+                        </td>
+                        <td><small class="text-muted">@(blog.Category ?? "-")</small></td>
+                        <td>
+                            <span class="badge @(blog.Status == "published" ? "bg-success" : "bg-warning text-dark")">
+                                @blog.Status
+                            </span>
+                            @if (blog.IsFeatured) { <span class="badge bg-warning text-dark ms-1">Featured</span> }
+                        </td>
+                        <td><small class="text-muted">@blog.ViewCount</small></td>
+                        <td><small class="text-muted">@(blog.PublishedAt?.ToString("MMM dd, yyyy") ?? "-")</small></td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Blogs" asp-action="Edit" asp-route-id="@blog.Id"
+                               class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <a asp-controller="Blogs" asp-action="Details" asp-route-slug="@blog.Slug" asp-area=""
+                               class="btn btn-sm btn-outline-secondary" target="_blank"><i class="bi bi-eye"></i></a>
+                            <form asp-area="Admin" asp-controller="Blogs" asp-action="Delete" method="post" class="d-inline"
+                                  onsubmit="return confirm('Delete this blog post?')">
+                                <input type="hidden" name="id" value="@blog.Id" />
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

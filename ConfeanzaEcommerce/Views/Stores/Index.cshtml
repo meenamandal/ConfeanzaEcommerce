@@ -1,0 +1,52 @@
+@model List<Store>
+@{
+    ViewData["Title"] = "Top Affiliate Stores";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Top Stores</h1>
+            <p class="text-muted mb-0">Shop from India's best stores and earn cashback</p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-shop fs-1 text-muted"></i>
+            <h4 class="mt-3">No stores found</h4>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var store in Model)
+            {
+                <div class="col-md-3 col-6">
+                    <a asp-controller="Stores" asp-action="Details" asp-route-slug="@store.Slug" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100 card-hover text-center p-3">
+                            @if (!string.IsNullOrEmpty(store.LogoUrl))
+                            {
+                                <img src="@store.LogoUrl" alt="@store.Name" class="img-fluid mx-auto mb-2" style="height:60px;object-fit:contain;" />
+                            }
+                            else
+                            {
+                                <div class="fs-2 text-primary mb-2"><i class="bi bi-shop"></i></div>
+                            }
+                            <h6 class="fw-bold text-dark">@store.Name</h6>
+                            @if (store.CommissionRate.HasValue)
+                            {
+                                <span class="badge bg-success">Up to @store.CommissionRate%</span>
+                            }
+                            @if (store.CookieDuration.HasValue)
+                            {
+                                <small class="text-muted d-block mt-1">@store.CookieDuration day cookie</small>
+                            }
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+</div>

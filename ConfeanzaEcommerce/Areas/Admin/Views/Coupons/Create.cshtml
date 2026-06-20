@@ -1,0 +1,86 @@
+@model Coupon
+@{
+    ViewData["Title"] = "Add Coupon";
+    var stores = ViewBag.Stores as List<Store> ?? new();
+}
+
+<a asp-area="Admin" asp-controller="Coupons" asp-action="Index" class="btn btn-outline-secondary btn-sm mb-4">
+    <i class="bi bi-arrow-left"></i> Back
+</a>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="Coupons" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Coupon Code *</label>
+                    <input name="Code" class="form-control text-uppercase" required placeholder="e.g. SAVE50" style="font-family:monospace;font-size:1.1rem;" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Store</label>
+                    <select name="StoreId" class="form-select">
+                        <option value="">-- All Stores --</option>
+                        @foreach (var s in stores) { <option value="@s.Id">@s.Name</option> }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Coupon Type *</label>
+                    <select name="Type" class="form-select" id="couponType">
+                        <option value="percentage">Percentage Off</option>
+                        <option value="flat">Flat Amount Off</option>
+                        <option value="free_shipping">Free Shipping</option>
+                        <option value="cashback">Cashback</option>
+                        <option value="bogo">Buy One Get One</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Title *</label>
+                    <input name="Title" class="form-control" required placeholder="e.g. Get 50% off on Electronics" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="Description" class="form-control" rows="2" placeholder="Terms and conditions..."></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Discount Value</label>
+                    <input name="DiscountValue" type="number" step="0.01" class="form-control" placeholder="e.g. 50 for 50% or ₹50" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Min. Order Value (₹)</label>
+                    <input name="MinOrderValue" type="number" step="0.01" class="form-control" placeholder="e.g. 999" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Max Discount (₹)</label>
+                    <input name="MaxDiscount" type="number" step="0.01" class="form-control" placeholder="Cap amount" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Affiliate URL (where to use coupon)</label>
+                    <input name="AffiliateUrl" class="form-control" placeholder="https://..." />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Valid From</label>
+                    <input name="StartsAt" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Valid Until</label>
+                    <input name="ExpiresAt" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-12 d-flex gap-4">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="IsActive" value="true" checked />
+                        <label class="form-check-label fw-semibold">Active</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="IsVerified" value="true" />
+                        <label class="form-check-label fw-semibold">Verified (tested & working)</label>
+                    </div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4">Create Coupon</button>
+                    <a asp-area="Admin" asp-controller="Coupons" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

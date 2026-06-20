@@ -1,0 +1,109 @@
+@model Store
+@{
+    ViewData["Title"] = Model.Name + " Coupons & Deals";
+    var coupons = ViewBag.Coupons as List<Coupon> ?? new();
+    var deals = ViewBag.Deals as List<Deal> ?? new();
+}
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Stores" asp-action="Index">Stores</a></li>
+            <li class="breadcrumb-item active">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body d-flex align-items-center gap-4">
+            @if (!string.IsNullOrEmpty(Model.LogoUrl))
+            {
+                <img src="@Model.LogoUrl" alt="@Model.Name" style="height:80px;object-fit:contain;" />
+            }
+            else
+            {
+                <div class="display-4 text-primary"><i class="bi bi-shop"></i></div>
+            }
+            <div>
+                <h1 class="h3 fw-bold mb-1">@Model.Name</h1>
+                @if (!string.IsNullOrEmpty(Model.Description)) { <p class="text-muted mb-2">@Model.Description</p> }
+                <div class="d-flex gap-2 flex-wrap">
+                    @if (Model.CommissionRate.HasValue)
+                    {
+                        <span class="badge bg-success fs-6">Up to @Model.CommissionRate% Cashback</span>
+                    }
+                    @if (Model.CookieDuration.HasValue)
+                    {
+                        <span class="badge bg-info text-dark">@Model.CookieDuration-day Cookie</span>
+                    }
+                    <span class="badge bg-primary">@Model.AffiliateNetwork</span>
+                </div>
+            </div>
+            <div class="ms-auto">
+                @if (!string.IsNullOrEmpty(Model.WebsiteUrl))
+                {
+                    <a href="@Model.WebsiteUrl" target="_blank" rel="nofollow noopener" class="btn btn-warning fw-bold">
+                        Visit Store <i class="bi bi-arrow-right"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (coupons.Any())
+    {
+        <h3 class="fw-bold mb-3"><i class="bi bi-ticket-perforated text-info"></i> @Model.Name Coupons</h3>
+        <div class="row g-3 mb-5">
+            @foreach (var coupon in coupons)
+            {
+                <div class="col-md-4">
+                    <div class="card border-info border-2 h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h6 class="fw-bold mb-0">@coupon.Title</h6>
+                                @if (coupon.IsVerified) { <span class="badge bg-success"><i class="bi bi-check-circle"></i> Verified</span> }
+                            </div>
+                            <p class="small text-muted">@coupon.Description</p>
+                            <div class="d-flex gap-2">
+                                <code class="flex-grow-1 bg-light rounded px-2 py-1 text-center border fs-6">@coupon.Code</code>
+                                <button class="btn btn-outline-primary btn-sm" onclick="navigator.clipboard.writeText('@coupon.Code')">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                            </div>
+                            @if (coupon.ExpiresAt.HasValue)
+                            {
+                                <small class="text-muted mt-2 d-block">Expires @coupon.ExpiresAt.Value.ToString("MMM dd, yyyy")</small>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (deals.Any())
+    {
+        <h3 class="fw-bold mb-3"><i class="bi bi-fire text-danger"></i> @Model.Name Deals</h3>
+        <div class="row g-3">
+            @foreach (var deal in deals)
+            {
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 card-hover">
+                        @if (!string.IsNullOrEmpty(deal.BannerImage))
+                        {
+                            <img src="@deal.BannerImage" class="card-img-top" alt="@deal.Title" style="height:140px;object-fit:cover;" />
+                        }
+                        <div class="card-body">
+                            <h6 class="fw-semibold">@deal.Title</h6>
+                            @if (deal.DiscountPercent.HasValue) { <span class="badge bg-danger">@deal.DiscountPercent% OFF</span> }
+                            @if (!string.IsNullOrEmpty(deal.AffiliateUrl))
+                            {
+                                <a href="@deal.AffiliateUrl" target="_blank" class="btn btn-warning btn-sm mt-2 d-block">Get Deal</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ConfeanzaEcommerce</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Top announcement bar -->
+    <div class="topbar text-white py-1">
+        <div class="container d-flex justify-content-between align-items-center" style="font-size:0.78rem;">
+            <span><i class="bi bi-lightning-charge-fill" style="color:#fbcfe8;"></i> India's #1 Affiliate Price Comparison &nbsp;|&nbsp; Best prices across 100+ stores</span>
+            <span><i class="bi bi-envelope me-1"></i>admin@confeanzaecommerce.com</span>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white sticky-top" style="border-bottom: 2px solid #fce7f3; box-shadow: 0 2px 12px rgba(236,72,153,.08);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index" style="font-size:1.5rem;">
+                <i class="bi bi-bag-heart-fill me-1" style="color:#ec4899;"></i>Confeanza
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <form class="d-flex mx-auto w-50" asp-controller="Products" asp-action="Index" method="get">
+                    <div class="input-group">
+                        <input type="search" name="q" class="form-control border-2" placeholder="Search products, brands, stores..." style="border-color:#f9a8d4;" />
+                        <button class="btn btn-primary" type="submit" style="background:#ec4899;border-color:#ec4899;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link fw-medium dropdown-toggle" href="#" data-bs-toggle="dropdown" style="color:#be185d;">
+                            <i class="bi bi-grid-3x3-gap"></i> Categories
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item" asp-controller="Categories" asp-action="Index">All Categories</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" asp-controller="Deals" asp-action="Index" style="color:#dc2626;">
+                            <i class="bi bi-fire"></i> Deals
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" asp-controller="Coupons" asp-action="Index" style="color:#be185d;">
+                            <i class="bi bi-ticket-perforated"></i> Coupons
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" asp-controller="Stores" asp-action="Index" style="color:#be185d;">
+                            <i class="bi bi-shop"></i> Stores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" asp-controller="Blogs" asp-action="Index" style="color:#be185d;">
+                            <i class="bi bi-journal-text"></i> Blog
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer text-white pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-2" style="font-size:1.3rem;">
+                        <i class="bi bi-bag-heart-fill me-1" style="color:#f9a8d4;"></i>
+                        <span style="color:#f9a8d4;">Confeanza</span>Ecommerce
+                    </h5>
+                    <p class="text-muted small lh-lg">India's trusted affiliate price comparison platform. Compare prices, find verified coupons &amp; grab the best deals.</p>
+                    <div class="d-flex gap-3 mt-3 fs-5">
+                        <a href="#" class="text-muted"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="fw-bold mb-3" style="color:#f9a8d4;">Shop</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Products" asp-action="Index">All Products</a></li>
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Categories" asp-action="Index">Categories</a></li>
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Deals" asp-action="Index">Today's Deals</a></li>
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Coupons" asp-action="Index">Coupons</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="fw-bold mb-3" style="color:#f9a8d4;">Stores</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Stores" asp-action="Index">Amazon India</a></li>
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Stores" asp-action="Index">Flipkart</a></li>
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Stores" asp-action="Index">Myntra</a></li>
+                        <li class="mb-1"><a class="text-muted text-decoration-none" asp-controller="Stores" asp-action="Index">View All</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3" style="color:#f9a8d4;">Stay Updated</h6>
+                    <p class="text-muted small">Get the latest deals &amp; price alerts in your inbox.</p>
+                    <form class="d-flex gap-2 mt-2">
+                        <input type="email" class="form-control form-control-sm bg-transparent text-white border-secondary" placeholder="your@email.com" />
+                        <button class="btn btn-warning btn-sm px-3 fw-semibold">Subscribe</button>
+                    </form>
+                    <small class="text-muted d-block mt-2">No spam. Unsubscribe anytime.</small>
+                </div>
+            </div>
+            <hr class="mt-4" style="border-color: rgba(236,72,153,.25);" />
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <p class="text-muted small mb-0">&copy; 2024 ConfeanzaEcommerce. All rights reserved.</p>
+                <p class="text-muted small mb-0">Made with <span style="color:#f9a8d4;">♥</span> in India</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

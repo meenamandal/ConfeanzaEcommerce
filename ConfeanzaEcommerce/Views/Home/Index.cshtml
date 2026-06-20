@@ -1,0 +1,246 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Home - Best Deals & Price Comparison";
+}
+
+<!-- Hero Banner -->
+<section class="hero-banner text-white py-5">
+    <div class="container py-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge mb-3 px-3 py-2" style="background:rgba(255,255,255,.18);color:#fce7f3;border:1px solid rgba(255,255,255,.35);border-radius:20px;">
+                    <i class="bi bi-stars me-1" style="color:#fbcfe8;"></i> India's #1 Price Comparison
+                </span>
+                <h1 class="display-4 fw-bold mb-3 lh-sm">
+                    Compare Prices.<br>
+                    <span style="color:#fce7f3;">Save More.</span>
+                </h1>
+                <p class="lead mb-4" style="color:rgba(255,255,255,.75);">
+                    Find the best deals across Amazon, Flipkart, Myntra &amp; 100+ stores — all in one place.
+                </p>
+                <form asp-controller="Products" asp-action="Index" method="get">
+                    <div class="input-group input-group-lg shadow-lg" style="max-width:540px;">
+                        <input type="search" name="q" class="form-control border-0"
+                               placeholder="Search mobiles, laptops, fashion..." style="border-radius:12px 0 0 12px;" />
+                        <button class="btn btn-warning px-4 fw-bold" type="submit" style="border-radius:0 12px 12px 0;">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-3 d-flex flex-wrap gap-2">
+                    <span class="badge px-3 py-2" style="background:rgba(255,255,255,.12);color:#fff;border-radius:20px;">
+                        <i class="bi bi-check-circle-fill me-1" style="color:#fbcfe8;"></i>Price Drop Alerts
+                    </span>
+                    <span class="badge px-3 py-2" style="background:rgba(255,255,255,.12);color:#fff;border-radius:20px;">
+                        <i class="bi bi-check-circle-fill me-1" style="color:#fbcfe8;"></i>Verified Coupons
+                    </span>
+                    <span class="badge px-3 py-2" style="background:rgba(255,255,255,.12);color:#fff;border-radius:20px;">
+                        <i class="bi bi-check-circle-fill me-1" style="color:#fbcfe8;"></i>Cashback Offers
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <div style="background:rgba(255,255,255,.07);border-radius:20px;padding:32px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);">
+                    <div class="row g-3 text-center">
+                        <div class="col-6">
+                            <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:20px;">
+                                <i class="bi bi-box-seam fs-2" style="color:#fce7f3;"></i>
+                                <div class="fw-bold fs-4 mt-1">50K+</div>
+                                <small style="color:rgba(255,255,255,.7);">Products</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:20px;">
+                                <i class="bi bi-shop fs-2" style="color:#fce7f3;"></i>
+                                <div class="fw-bold fs-4 mt-1">100+</div>
+                                <small style="color:rgba(255,255,255,.7);">Stores</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:20px;">
+                                <i class="bi bi-ticket-perforated fs-2" style="color:#fce7f3;"></i>
+                                <div class="fw-bold fs-4 mt-1">5K+</div>
+                                <small style="color:rgba(255,255,255,.7);">Coupons</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:20px;">
+                                <i class="bi bi-people fs-2" style="color:#fce7f3;"></i>
+                                <div class="fw-bold fs-4 mt-1">2M+</div>
+                                <small style="color:rgba(255,255,255,.7);">Savers</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+@if (Model.FeaturedCategories.Any())
+{
+    <section class="py-5" style="background:#fdf2f8;">
+        <div class="container">
+            <h2 class="fw-bold mb-1 section-title">Shop by Category</h2>
+            <p class="text-muted mb-4">Browse from hundreds of curated product categories</p>
+            <div class="row g-3">
+                @foreach (var cat in Model.FeaturedCategories)
+                {
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <a asp-controller="Categories" asp-action="Details" asp-route-slug="@cat.Slug" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm text-center h-100 card-hover">
+                                <div class="card-body py-3">
+                                    <div class="fs-2 mb-2" style="color:#ec4899;"><i class="bi bi-grid"></i></div>
+                                    <p class="mb-0 fw-semibold small">@cat.Name</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Active Deals -->
+@if (Model.ActiveDeals.Any())
+{
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1 section-title"><i class="bi bi-fire me-1" style="color:#dc2626;"></i>Today's Top Deals</h2>
+                    <p class="text-muted mb-0 small">Limited-time offers — grab them before they're gone!</p>
+                </div>
+                <a asp-controller="Deals" asp-action="Index" class="btn btn-sm btn-outline-danger">View All Deals</a>
+            </div>
+            <div class="row g-3">
+                @foreach (var deal in Model.ActiveDeals)
+                {
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100 card-hover">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold">@deal.Title</h6>
+                                @if (deal.DiscountPercent.HasValue) { <span class="badge bg-danger">@deal.DiscountPercent% OFF</span> }
+                                @if (deal.Store != null) { <span class="badge bg-light text-dark ms-1">@deal.Store.Name</span> }
+                                @if (!string.IsNullOrEmpty(deal.AffiliateUrl))
+                                {
+                                    <a href="@deal.AffiliateUrl" target="_blank" rel="nofollow noopener" class="btn btn-warning btn-sm mt-2 d-block">Get Deal</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Featured Products -->
+@if (Model.FeaturedProducts.Any())
+{
+    <section class="py-5" style="background:#fdf2f8;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1 section-title">Featured Products</h2>
+                    <p class="text-muted mb-0 small">Handpicked products with the best price-to-value ratio</p>
+                </div>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary btn-sm">View All</a>
+            </div>
+            <div class="row g-3">
+                @foreach (var product in Model.FeaturedProducts)
+                {
+                    var img = product.Images.FirstOrDefault(i => i.IsPrimary) ?? product.Images.FirstOrDefault();
+                    var bestPrice = product.AffiliateLinks.Where(a => a.IsActive && a.InStock && a.Price.HasValue).OrderBy(a => a.Price).FirstOrDefault();
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <a asp-controller="Products" asp-action="Details" asp-route-slug="@product.Slug" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100 card-hover">
+                                @if (img != null)
+                                {
+                                    <img src="@img.Url" alt="@product.Name" class="card-img-top p-2" style="height:180px;object-fit:contain;" />
+                                }
+                                <div class="card-body">
+                                    <p class="small fw-semibold text-dark lh-sm mb-1" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">@product.Name</p>
+                                    @if (bestPrice != null)
+                                    {
+                                        <span class="fw-bold text-success">₹@bestPrice.Price?.ToString("N0")</span>
+                                        @if (bestPrice.Mrp.HasValue && bestPrice.Mrp > bestPrice.Price)
+                                        {
+                                            <small class="text-muted text-decoration-line-through ms-1">₹@bestPrice.Mrp.Value.ToString("N0")</small>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Active Coupons -->
+@if (Model.ActiveCoupons.Any())
+{
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0"><i class="bi bi-ticket-perforated text-info"></i> Active Coupons</h2>
+                <a asp-controller="Coupons" asp-action="Index" class="btn btn-outline-info btn-sm">All Coupons</a>
+            </div>
+            <div class="row g-3">
+                @foreach (var coupon in Model.ActiveCoupons)
+                {
+                    <div class="col-md-4">
+                        <div class="card border-info border-2 h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold mb-1">@coupon.Title</h6>
+                                @if (coupon.Store != null) { <small class="text-muted">@coupon.Store.Name</small> }
+                                <div class="d-flex align-items-center gap-2 mt-3">
+                                    <code class="fs-6 bg-light px-3 py-1 rounded flex-grow-1 text-center">@coupon.Code</code>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="navigator.clipboard.writeText('@coupon.Code')">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Latest Blogs -->
+@if (Model.LatestBlogs.Any())
+{
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Latest from Blog</h2>
+                <a asp-controller="Blogs" asp-action="Index" class="btn btn-outline-secondary btn-sm">Read All</a>
+            </div>
+            <div class="row g-4">
+                @foreach (var blog in Model.LatestBlogs)
+                {
+                    <div class="col-md-4">
+                        <a asp-controller="Blogs" asp-action="Details" asp-route-slug="@blog.Slug" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100 card-hover">
+                                @if (!string.IsNullOrEmpty(blog.CoverImage))
+                                {
+                                    <img src="@blog.CoverImage" class="card-img-top" alt="@blog.Title" style="height:180px;object-fit:cover;" />
+                                }
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-dark">@blog.Title</h6>
+                                    @if (!string.IsNullOrEmpty(blog.Excerpt)) { <p class="text-muted small">@blog.Excerpt</p> }
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

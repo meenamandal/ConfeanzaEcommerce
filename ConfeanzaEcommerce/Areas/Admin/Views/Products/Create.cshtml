@@ -1,0 +1,73 @@
+@model Product
+@{
+    ViewData["Title"] = "Add Product";
+    var categories = ViewBag.Categories as List<Category> ?? new();
+    var brands = ViewBag.Brands as List<Brand> ?? new();
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="Products" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label fw-semibold">Product Name *</label>
+                    <input name="Name" class="form-control" required placeholder="e.g. Samsung Galaxy S23" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="Status" class="form-select">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Category</label>
+                    <select name="CategoryId" class="form-select">
+                        <option value="">-- Select Category --</option>
+                        @foreach (var c in categories)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Brand</label>
+                    <select name="BrandId" class="form-select">
+                        <option value="">-- Select Brand --</option>
+                        @foreach (var b in brands)
+                        {
+                            <option value="@b.Id">@b.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Short Description</label>
+                    <input name="ShortDescription" class="form-control" placeholder="Brief one-line description" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Full Description</label>
+                    <textarea name="Description" class="form-control" rows="5" placeholder="Detailed product description..."></textarea>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check form-switch mt-4">
+                        <input class="form-check-input" type="checkbox" name="IsFeatured" value="true" />
+                        <label class="form-check-label fw-semibold">Featured</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check form-switch mt-4">
+                        <input class="form-check-input" type="checkbox" name="IsTrending" value="true" />
+                        <label class="form-check-label fw-semibold">Trending</label>
+                    </div>
+                </div>
+                <div class="col-12 d-flex gap-2 mt-2">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-check-circle me-1"></i> Save Product
+                    </button>
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

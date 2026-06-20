@@ -1,0 +1,125 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-md-2">
+        <div class="card stat-card shadow-sm bg-primary text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-box fs-2"></i>
+                <h3 class="fw-bold my-1">@ViewBag.ProductCount</h3>
+                <small>Products</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card stat-card shadow-sm bg-success text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-grid fs-2"></i>
+                <h3 class="fw-bold my-1">@ViewBag.CategoryCount</h3>
+                <small>Categories</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card stat-card shadow-sm bg-info text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-shop fs-2"></i>
+                <h3 class="fw-bold my-1">@ViewBag.StoreCount</h3>
+                <small>Stores</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card stat-card shadow-sm bg-warning text-dark">
+            <div class="card-body text-center">
+                <i class="bi bi-ticket-perforated fs-2"></i>
+                <h3 class="fw-bold my-1">@ViewBag.CouponCount</h3>
+                <small>Coupons</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card stat-card shadow-sm bg-danger text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-fire fs-2"></i>
+                <h3 class="fw-bold my-1">@ViewBag.DealCount</h3>
+                <small>Deals</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card stat-card shadow-sm bg-secondary text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-journal-text fs-2"></i>
+                <h3 class="fw-bold my-1">@ViewBag.BlogCount</h3>
+                <small>Blog Posts</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+                <span>Recent Products</span>
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.RecentProducts is List<ConfeanzaEcommerce.Models.Entities.Product> products)
+                        {
+                            @foreach (var p in products)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" asp-area="" class="text-decoration-none">
+                                            @p.Name.Length > 50 ? p.Name.Substring(0, 50) + "..." : p.Name
+                                        </a>
+                                    </td>
+                                    <td><small class="text-muted">@(p.Category?.Name ?? "-")</small></td>
+                                    <td>
+                                        <span class="badge @(p.Status == "published" ? "bg-success" : "bg-warning text-dark")">
+                                            @p.Status
+                                        </span>
+                                    </td>
+                                    <td><small class="text-muted">@p.CreatedAt.ToString("MMM dd")</small></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white fw-bold">Quick Actions</div>
+            <div class="card-body d-grid gap-2">
+                <a asp-area="Admin" asp-controller="Products" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Add Product
+                </a>
+                <a asp-area="Admin" asp-controller="Deals" asp-action="Create" class="btn btn-outline-danger">
+                    <i class="bi bi-fire me-2"></i>Add Deal
+                </a>
+                <a asp-area="Admin" asp-controller="Coupons" asp-action="Create" class="btn btn-outline-info">
+                    <i class="bi bi-ticket-perforated me-2"></i>Add Coupon
+                </a>
+                <a asp-area="Admin" asp-controller="Blogs" asp-action="Create" class="btn btn-outline-secondary">
+                    <i class="bi bi-pencil-square me-2"></i>Write Blog Post
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

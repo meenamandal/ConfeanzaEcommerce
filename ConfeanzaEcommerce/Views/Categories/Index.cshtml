@@ -1,0 +1,40 @@
+@model List<Category>
+@{
+    ViewData["Title"] = "All Categories";
+}
+
+<div class="container py-4">
+    <h1 class="fw-bold mb-4">Shop by Category</h1>
+    <div class="row g-4">
+        @foreach (var cat in Model)
+        {
+            <div class="col-md-3 col-6">
+                <a asp-controller="Categories" asp-action="Details" asp-route-slug="@cat.Slug" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm h-100 card-hover text-center p-3">
+                        @if (!string.IsNullOrEmpty(cat.ImageUrl))
+                        {
+                            <img src="@cat.ImageUrl" alt="@cat.Name" class="img-fluid mx-auto mb-3" style="height:80px;object-fit:contain;" />
+                        }
+                        else if (!string.IsNullOrEmpty(cat.IconUrl))
+                        {
+                            <img src="@cat.IconUrl" alt="@cat.Name" class="img-fluid mx-auto mb-3" style="height:60px;object-fit:contain;" />
+                        }
+                        else
+                        {
+                            <div class="fs-1 text-primary mb-2"><i class="bi bi-grid-3x3-gap"></i></div>
+                        }
+                        <h6 class="fw-bold text-dark">@cat.Name</h6>
+                        @if (!string.IsNullOrEmpty(cat.Description))
+                        {
+                            <p class="text-muted small mb-0" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">@cat.Description</p>
+                        }
+                        @if (cat.Subcategories.Any())
+                        {
+                            <small class="text-primary mt-1">@cat.Subcategories.Count subcategories</small>
+                        }
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,85 @@
+@model List<Blog>
+@{
+    ViewData["Title"] = "Blog - Shopping Tips & Reviews";
+    int total = ViewBag.Total ?? 0;
+    int page = ViewBag.Page ?? 1;
+    int pageSize = ViewBag.PageSize ?? 9;
+    string? category = ViewBag.Category;
+    int totalPages = (int)Math.Ceiling((double)total / pageSize);
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Shopping Blog</h1>
+            <p class="text-muted mb-0">Tips, reviews & buying guides</p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-journal-text fs-1 text-muted"></i>
+            <h4 class="mt-3">No blog posts yet</h4>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var blog in Model)
+            {
+                <div class="col-md-4">
+                    <a asp-controller="Blogs" asp-action="Details" asp-route-slug="@blog.Slug" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100 card-hover">
+                            @if (!string.IsNullOrEmpty(blog.CoverImage))
+                            {
+                                <img src="@blog.CoverImage" class="card-img-top" alt="@blog.Title" style="height:200px;object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="bg-gradient d-flex align-items-center justify-content-center" style="height:150px;background:linear-gradient(135deg,#667eea,#764ba2);">
+                                    <i class="bi bi-journal-text text-white display-3"></i>
+                                </div>
+                            }
+                            <div class="card-body">
+                                @if (!string.IsNullOrEmpty(blog.Category))
+                                {
+                                    <span class="badge bg-primary mb-2">@blog.Category</span>
+                                }
+                                <h5 class="card-title fw-bold text-dark">@blog.Title</h5>
+                                @if (!string.IsNullOrEmpty(blog.Excerpt))
+                                {
+                                    <p class="card-text text-muted small">@blog.Excerpt</p>
+                                }
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-muted">
+                                        @if (blog.PublishedAt.HasValue) { @blog.PublishedAt.Value.ToString("MMM dd, yyyy") }
+                                    </small>
+                                    @if (blog.ReadTime.HasValue)
+                                    {
+                                        <small class="text-muted"><i class="bi bi-clock"></i> @blog.ReadTime min read</small>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+
+        @if (totalPages > 1)
+        {
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == page ? "active" : "")">
+                            <a class="page-link" asp-controller="Blogs" asp-action="Index"
+                               asp-route-category="@category" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+</div>

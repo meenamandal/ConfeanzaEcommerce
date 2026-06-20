@@ -1,0 +1,54 @@
+@model List<Store>
+@{
+    ViewData["Title"] = "Stores";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-2"></i>@TempData["Success"]<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="text-muted mb-0">@Model.Count stores</p>
+    <a asp-area="Admin" asp-controller="Stores" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Add Store
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Logo</th><th>Name</th><th>Network</th><th>Commission</th><th>Active</th><th>Featured</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var store in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(store.LogoUrl))
+                            {
+                                <img src="@store.LogoUrl" alt="@store.Name" style="height:32px;object-fit:contain;" />
+                            }
+                        </td>
+                        <td class="fw-semibold">@store.Name</td>
+                        <td><span class="badge bg-info text-dark">@store.AffiliateNetwork</span></td>
+                        <td>@(store.CommissionRate.HasValue ? store.CommissionRate + "%" : "-")</td>
+                        <td><span class="badge @(store.IsActive ? "bg-success" : "bg-secondary")">@(store.IsActive ? "Active" : "Off")</span></td>
+                        <td>@if (store.IsFeatured) { <span class="badge bg-warning text-dark">Featured</span> }</td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Stores" asp-action="Edit" asp-route-id="@store.Id"
+                               class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form asp-area="Admin" asp-controller="Stores" asp-action="Delete" method="post" class="d-inline"
+                                  onsubmit="return confirm('Delete store @store.Name?')">
+                                <input type="hidden" name="id" value="@store.Id" />
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
