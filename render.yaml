@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: confeanza-ecommerce
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    port: 8080
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false   # set this manually in Render dashboard — never commit the real password
