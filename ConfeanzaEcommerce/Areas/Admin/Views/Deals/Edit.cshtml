@@ -23,7 +23,7 @@
                     <select name="DealType" class="form-select">
                         @foreach (var t in new[]{"daily_deal","flash_sale","clearance","seasonal","bank_offer"})
                         {
-                            <option value="@t" selected="@(Model.DealType == t)">@t.Replace("_"," ").ToUpper()</option>
+                            <option value="@t" selected="@(Model.DealType == t ? "selected" : null)">@t.Replace("_"," ").ToUpper()</option>
                         }
                     </select>
                 </div>
@@ -33,7 +33,7 @@
                         <option value="">-- No Specific Store --</option>
                         @foreach (var s in stores)
                         {
-                            <option value="@s.Id" selected="@(Model.StoreId == s.Id)">@s.Name</option>
+                            <option value="@s.Id" selected="@(Model.StoreId == s.Id ? "selected" : null)">@s.Name</option>
                         }
                     </select>
                 </div>

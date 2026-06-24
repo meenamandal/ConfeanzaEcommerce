@@ -23,7 +23,9 @@
             <div class="card border-0 shadow-sm p-3">
                 @if (primaryImg != null)
                 {
-                    <img src="@primaryImg.Url" alt="@Model.Product.Name" class="img-fluid" style="max-height:400px;object-fit:contain;" />
+                    <img id="mainProductImage" src="@primaryImg.Url" alt="@Model.Product.Name"
+                         class="img-fluid d-block mx-auto"
+                         style="max-height:400px;object-fit:contain;transition:opacity .15s ease;" />
                 }
                 else
                 {
@@ -34,13 +36,35 @@
                 @if (Model.Product.Images.Count > 1)
                 {
                     <div class="d-flex gap-2 mt-3 overflow-auto">
-                        @foreach (var img in Model.Product.Images.Take(6))
+                        @foreach (var img in Model.Product.Images)
                         {
-                            <img src="@img.Url" alt="" class="border rounded" style="width:60px;height:60px;object-fit:contain;cursor:pointer;" />
+                            <img src="@img.Url" alt=""
+                                 class="border rounded thumb-img @(img.IsPrimary || (img == Model.Product.Images.First() && primaryImg == null) ? "border-primary border-2" : "")"
+                                 style="width:64px;height:64px;object-fit:contain;cursor:pointer;flex-shrink:0;transition:border-color .15s;"
+                                 onclick="switchImage(this, '@img.Url')" />
                         }
                     </div>
                 }
             </div>
+
+            @section Scripts {
+            <script>
+            function switchImage(thumb, url) {
+                var main = document.getElementById('mainProductImage');
+                if (!main) return;
+                main.style.opacity = '0';
+                setTimeout(function() {
+                    main.src = url;
+                    main.style.opacity = '1';
+                }, 120);
+                document.querySelectorAll('.thumb-img').forEach(function(t) {
+                    t.classList.remove('border-primary', 'border-2');
+                    t.style.opacity = '1';
+                });
+                thumb.classList.add('border-primary', 'border-2');
+            }
+            </script>
+            }
         </div>
 
         <!-- Product Info -->

@@ -22,7 +22,7 @@
                     <label class="form-label fw-semibold">Store</label>
                     <select name="StoreId" class="form-select">
                         <option value="">-- All Stores --</option>
-                        @foreach (var s in stores) { <option value="@s.Id" selected="@(Model.StoreId == s.Id)">@s.Name</option> }
+                        @foreach (var s in stores) { <option value="@s.Id" selected="@(Model.StoreId == s.Id ? "selected" : null)">@s.Name</option> }
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -30,7 +30,7 @@
                     <select name="Type" class="form-select">
                         @foreach (var t in new[]{"percentage","flat","free_shipping","cashback","bogo"})
                         {
-                            <option value="@t" selected="@(Model.Type == t)">@t.Replace("_"," ").ToUpper()</option>
+                            <option value="@t" selected="@(Model.Type == t ? "selected" : null)">@t.Replace("_"," ").ToUpper()</option>
                         }
                     </select>
                 </div>

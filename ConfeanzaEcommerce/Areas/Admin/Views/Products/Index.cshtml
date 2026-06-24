@@ -43,7 +43,7 @@
                     <tr>
                         <td class="text-muted small">@i</td>
                         <td>
-                            <a asp-controller="Products" asp-action="Details" asp-route-slug="@product.Slug" asp-area="" class="text-decoration-none fw-semibold" target="_blank">
+                            <a asp-area="Admin" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="text-decoration-none fw-semibold">
                                 @(product.Name.Length > 60 ? product.Name.Substring(0, 60) + "..." : product.Name)
                             </a>
                         </td>
@@ -61,12 +61,16 @@
                             }
                         </td>
                         <td><small class="text-muted">@product.CreatedAt.ToString("MMM dd, yyyy")</small></td>
-                        <td>
+                        <td class="d-flex gap-1">
+                            <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id"
+                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
                             <form asp-area="Admin" asp-controller="Products" asp-action="Delete" method="post" class="d-inline"
                                   onsubmit="return confirm('Delete this product?')">
                                 <input type="hidden" name="id" value="@product.Id" />
                                 @Html.AntiForgeryToken()
-                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
                             </form>
                         </td>
                     </tr>

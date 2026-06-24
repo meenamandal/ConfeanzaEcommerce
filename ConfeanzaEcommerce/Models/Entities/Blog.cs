@@ -12,7 +12,7 @@ public class Blog
     [Column("excerpt")] public string? Excerpt { get; set; }
     [Column("content")] [Required] public string Content { get; set; } = "";
     [Column("cover_image")] public string? CoverImage { get; set; }
-    [Column("author_id")] [Required] public string AuthorId { get; set; } = "";
+    [Column("author_id")] public string? AuthorId { get; set; }
     [Column("STATUS")] [MaxLength(20)] public string Status { get; set; } = "draft";
     [Column("is_featured")] public bool IsFeatured { get; set; } = false;
     [Column("category")] public string? Category { get; set; }

@@ -1,0 +1,404 @@
+@model Product
+@{
+    ViewData["Title"] = "Product Details";
+    var primaryImg = Model.Images.FirstOrDefault(i => i.IsPrimary) ?? Model.Images.FirstOrDefault();
+    var activeLinks = Model.AffiliateLinks.Where(a => a.IsActive).OrderBy(a => a.Price).ToList();
+}
+
+<div class="d-flex gap-2 mb-4 align-items-center flex-wrap">
+    <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+    <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">
+        <i class="bi bi-pencil me-1"></i> Edit Product
+    </a>
+    <a asp-area="Admin" asp-controller="AffiliateLinks" asp-action="Index" asp-route-productId="@Model.Id" class="btn btn-warning btn-sm">
+        <i class="bi bi-currency-rupee me-1"></i> Manage Prices (@Model.AffiliateLinks.Count)
+    </a>
+    @if (Model.Status == "published")
+    {
+        <a asp-controller="Products" asp-action="Details" asp-route-slug="@Model.Slug" asp-area="" target="_blank" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-box-arrow-up-right me-1"></i> View on Site
+        </a>
+    }
+    <span class="ms-auto badge fs-6 @(Model.Status == "published" ? "bg-success" : Model.Status == "draft" ? "bg-warning text-dark" : "bg-secondary")">
+        @Model.Status.ToUpper()
+    </span>
+</div>
+
+<div class="row g-4">
+    <!-- Left: Image + Stats -->
+    <div class="col-md-4">
+        <!-- Primary image preview -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body text-center p-3">
+                @if (primaryImg != null)
+                {
+                    <img src="@primaryImg.Url" alt="@Model.Name" class="img-fluid rounded"
+                         style="max-height:260px;object-fit:contain;" id="mainPreview" />
+                }
+                else
+                {
+                    <div class="bg-light d-flex flex-column align-items-center justify-content-center rounded"
+                         style="height:200px;" id="mainPreview">
+                        <i class="bi bi-image text-muted" style="font-size:3rem;"></i>
+                        <small class="text-muted mt-2">No image yet</small>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Upload multiple images -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-white fw-semibold">
+                <i class="bi bi-cloud-upload me-1"></i> Upload Images
+            </div>
+            <div class="card-body p-2">
+                <form id="uploadForm" asp-area="Admin" asp-controller="Products" asp-action="UploadImage"
+                      asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Drop zone -->
+                    <div id="dropZone"
+                         style="border:2px dashed #ec4899;border-radius:10px;padding:20px 10px;text-align:center;cursor:pointer;background:#fdf2f8;transition:background .2s;"
+                         onclick="document.getElementById('imageFiles').click()"
+                         ondragover="event.preventDefault();this.style.background='#fce7f3'"
+                         ondragleave="this.style.background='#fdf2f8'"
+                         ondrop="handleDrop(event)">
+                        <i class="bi bi-images" style="font-size:2rem;color:#ec4899;"></i>
+                        <div class="fw-semibold small mt-1" style="color:#be185d;">Click or drag images here</div>
+                        <div class="text-muted" style="font-size:0.72rem;">JPG, PNG, WebP, GIF &nbsp;·&nbsp; max 5 MB each</div>
+                    </div>
+
+                    <input type="file" id="imageFiles" name="imageFiles" multiple
+                           accept=".jpg,.jpeg,.png,.webp,.gif"
+                           class="d-none" onchange="addFiles(this.files)" />
+
+                    <!-- Selected previews -->
+                    <div id="previewGrid" class="row g-2 mt-2"></div>
+
+                    <!-- Upload button (hidden until files selected) -->
+                    <button type="submit" id="uploadBtn"
+                            class="btn btn-primary btn-sm w-100 mt-2 d-none">
+                        <i class="bi bi-upload me-1"></i>
+                        Upload <span id="uploadCount"></span> Image(s)
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white fw-semibold small">Stats</div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <tr><td class="text-muted">Views</td><td class="fw-semibold">@Model.ViewCount.ToString("N0")</td></tr>
+                    <tr><td class="text-muted">Clicks</td><td class="fw-semibold">@Model.ClickCount.ToString("N0")</td></tr>
+                    <tr><td class="text-muted">Wishlist</td><td class="fw-semibold">@Model.WishlistCount.ToString("N0")</td></tr>
+                    <tr><td class="text-muted">Rating</td>
+                        <td class="fw-semibold">
+                            @if (Model.AvgRating > 0)
+                            {
+                                <span class="text-warning"><i class="bi bi-star-fill"></i> @Model.AvgRating.ToString("F1")</span>
+                                <small class="text-muted">(@Model.ReviewCount)</small>
+                            }
+                            else { <span class="text-muted">No reviews</span> }
+                        </td>
+                    </tr>
+                    <tr><td class="text-muted">Created</td><td class="small">@Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td></tr>
+                    <tr><td class="text-muted">Updated</td><td class="small">@Model.UpdatedAt.ToString("dd MMM yyyy, hh:mm tt")</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Details -->
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+                <h4 class="fw-bold mb-1">@Model.Name</h4>
+                <p class="text-muted small mb-3">Slug: <code>@Model.Slug</code></p>
+
+                <div class="row g-3">
+                    <div class="col-sm-4">
+                        <div class="text-muted small">Category</div>
+                        <div class="fw-semibold">@(Model.Category?.Name ?? "—")</div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="text-muted small">Brand</div>
+                        <div class="fw-semibold">@(Model.Brand?.Name ?? "—")</div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="text-muted small">SKU</div>
+                        <div class="fw-semibold">@(string.IsNullOrEmpty(Model.Sku) ? "—" : Model.Sku)</div>
+                    </div>
+                    @if (Model.LowestPrice.HasValue)
+                    {
+                        <div class="col-sm-4">
+                            <div class="text-muted small">Lowest Price</div>
+                            <div class="fw-bold text-success">₹@Model.LowestPrice.Value.ToString("N0")</div>
+                        </div>
+                    }
+                    @if (Model.HighestPrice.HasValue)
+                    {
+                        <div class="col-sm-4">
+                            <div class="text-muted small">Highest Price</div>
+                            <div class="fw-semibold">₹@Model.HighestPrice.Value.ToString("N0")</div>
+                        </div>
+                    }
+                </div>
+
+                <div class="d-flex gap-3 mt-3">
+                    @if (Model.IsFeatured)   { <span class="badge bg-primary"><i class="bi bi-star me-1"></i>Featured</span> }
+                    @if (Model.IsTrending)   { <span class="badge bg-info text-dark"><i class="bi bi-graph-up me-1"></i>Trending</span> }
+                    @if (Model.IsDealOfDay)  { <span class="badge bg-danger"><i class="bi bi-fire me-1"></i>Deal of Day</span> }
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ShortDescription))
+                {
+                    <hr />
+                    <div class="text-muted small mb-1">Short Description</div>
+                    <p class="mb-0">@Model.ShortDescription</p>
+                }
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-white fw-semibold">Full Description</div>
+                <div class="card-body">
+                    <div class="blog-content">@Html.Raw(Model.Description)</div>
+                </div>
+            </div>
+        }
+
+        <!-- Affiliate Links / Prices -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-currency-rupee me-1"></i> Prices (@Model.AffiliateLinks.Count stores)</span>
+                <a asp-area="Admin" asp-controller="AffiliateLinks" asp-action="Index" asp-route-productId="@Model.Id"
+                   class="btn btn-sm btn-outline-warning">Manage</a>
+            </div>
+            @if (Model.AffiliateLinks.Any())
+            {
+                <div class="card-body p-0">
+                    <table class="table table-hover table-sm mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Store</th>
+                                <th>Price</th>
+                                <th>MRP</th>
+                                <th>Discount</th>
+                                <th>Stock</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var link in Model.AffiliateLinks.OrderBy(l => l.Price))
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@(link.Store?.Name ?? "—")</td>
+                                    <td class="text-success fw-bold">@(link.Price.HasValue ? "₹" + link.Price.Value.ToString("N0") : "—")</td>
+                                    <td class="text-muted text-decoration-line-through">@(link.Mrp.HasValue ? "₹" + link.Mrp.Value.ToString("N0") : "—")</td>
+                                    <td>@(link.DiscountPercent.HasValue ? link.DiscountPercent + "%" : "—")</td>
+                                    <td>
+                                        @if (link.InStock) { <span class="badge bg-success">In Stock</span> }
+                                        else { <span class="badge bg-secondary">Out of Stock</span> }
+                                    </td>
+                                    <td>
+                                        @if (link.IsActive) { <span class="badge bg-primary">Active</span> }
+                                        else { <span class="badge bg-light text-dark">Inactive</span> }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="card-body text-center text-muted py-3">
+                    No prices added yet.
+                    <a asp-area="Admin" asp-controller="AffiliateLinks" asp-action="Index" asp-route-productId="@Model.Id" class="ms-2">Add prices</a>
+                </div>
+            }
+        </div>
+
+        <!-- Specifications -->
+        @if (Model.Specifications.Any())
+        {
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-white fw-semibold">Specifications</div>
+                <div class="card-body">
+                    @foreach (var group in Model.Specifications.GroupBy(s => s.GroupName))
+                    {
+                        <h6 class="fw-bold text-muted small text-uppercase mt-2">@group.Key</h6>
+                        <table class="table table-sm table-bordered mb-3">
+                            @foreach (var spec in group.OrderBy(s => s.SortOrder))
+                            {
+                                <tr>
+                                    <th class="bg-light w-40">@spec.SpecKey</th>
+                                    <td>@spec.SpecValue @spec.Unit</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Images management -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-images me-1"></i> Images (@Model.Images.Count)</span>
+            </div>
+            @if (Model.Images.Any())
+            {
+                <div class="card-body">
+                    <div class="row g-2">
+                        @foreach (var img in Model.Images.OrderBy(i => i.SortOrder))
+                        {
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center position-relative @(img.IsPrimary ? "border-primary border-2" : "")">
+                                    <img src="@img.Url" alt="@img.AltText"
+                                         class="img-fluid rounded mb-1"
+                                         style="height:100px;width:100%;object-fit:contain;cursor:pointer;"
+                                         onclick="document.getElementById('mainPreview').src='@img.Url'" />
+                                    @if (img.IsPrimary)
+                                    {
+                                        <span class="badge bg-primary d-block mb-1" style="font-size:0.6rem;">PRIMARY</span>
+                                    }
+                                    <div class="d-flex gap-1 justify-content-center mt-1">
+                                        @if (!img.IsPrimary)
+                                        {
+                                            <form asp-area="Admin" asp-controller="Products" asp-action="SetPrimaryImage" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="imageId" value="@img.Id" />
+                                                <input type="hidden" name="productId" value="@Model.Id" />
+                                                <button type="submit" class="btn btn-outline-primary btn-sm py-0 px-1" title="Set as primary"
+                                                        style="font-size:0.7rem;">
+                                                    <i class="bi bi-star"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        <form asp-area="Admin" asp-controller="Products" asp-action="DeleteImage" method="post" class="d-inline"
+                                              onsubmit="return confirm('Delete this image?')">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="imageId" value="@img.Id" />
+                                            <input type="hidden" name="productId" value="@Model.Id" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-1" title="Delete"
+                                                    style="font-size:0.7rem;">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card-body text-center text-muted py-3">
+                    <i class="bi bi-image fs-2 d-block mb-1"></i>
+                    No images uploaded yet.
+                </div>
+            }
+        </div>
+
+        <!-- Reviews -->
+        @if (Model.Reviews.Any())
+        {
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white fw-semibold">Reviews (@Model.Reviews.Count)</div>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0">
+                        <thead class="table-light">
+                            <tr><th>Rating</th><th>Title</th><th>Status</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt).Take(10))
+                            {
+                                <tr>
+                                    <td><span class="text-warning">@("★".PadRight(review.Rating, '★').PadRight(5, '☆'))</span></td>
+                                    <td>@(review.Title ?? "—")</td>
+                                    <td><span class="badge @(review.Status == "approved" ? "bg-success" : "bg-warning text-dark")">@review.Status</span></td>
+                                    <td><small class="text-muted">@review.CreatedAt.ToString("dd MMM yyyy")</small></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+// Accumulate selected files across multiple selections
+var selectedFiles = new DataTransfer();
+
+function addFiles(files) {
+    for (var i = 0; i < files.length; i++) {
+        selectedFiles.items.add(files[i]);
+    }
+    document.getElementById('imageFiles').files = selectedFiles.files;
+    renderPreviews();
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('dropZone').style.background = '#fdf2f8';
+    addFiles(e.dataTransfer.files);
+}
+
+function removeFile(index) {
+    var dt = new DataTransfer();
+    var files = selectedFiles.files;
+    for (var i = 0; i < files.length; i++) {
+        if (i !== index) dt.items.add(files[i]);
+    }
+    selectedFiles = dt;
+    document.getElementById('imageFiles').files = selectedFiles.files;
+    renderPreviews();
+}
+
+function renderPreviews() {
+    var grid = document.getElementById('previewGrid');
+    var btn  = document.getElementById('uploadBtn');
+    var cnt  = document.getElementById('uploadCount');
+    var files = selectedFiles.files;
+    grid.innerHTML = '';
+
+    if (files.length === 0) { btn.classList.add('d-none'); return; }
+
+    for (var i = 0; i < files.length; i++) {
+        (function(idx, file) {
+            var col = document.createElement('div');
+            col.className = 'col-4';
+            col.innerHTML =
+                '<div class="position-relative border rounded" style="height:90px;overflow:hidden;">' +
+                    '<img style="width:100%;height:100%;object-fit:cover;" />' +
+                    '<button type="button" onclick="removeFile(' + idx + ')" ' +
+                        'style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.55);border:none;' +
+                        'color:#fff;border-radius:50%;width:20px;height:20px;font-size:12px;line-height:1;' +
+                        'display:flex;align-items:center;justify-content:center;cursor:pointer;">' +
+                        '&times;</button>' +
+                    '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);' +
+                        'color:#fff;font-size:0.6rem;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' +
+                        file.name + '</div>' +
+                '</div>';
+            var reader = new FileReader();
+            reader.onload = function(e) { col.querySelector('img').src = e.target.result; };
+            reader.readAsDataURL(file);
+            grid.appendChild(col);
+        })(i, files[i]);
+    }
+
+    cnt.textContent = files.length;
+    btn.classList.remove('d-none');
+}
+</script>
+}

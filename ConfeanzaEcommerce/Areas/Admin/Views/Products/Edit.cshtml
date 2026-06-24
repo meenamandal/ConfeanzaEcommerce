@@ -28,9 +28,9 @@
                 <div class="col-md-4">
                     <label class="form-label fw-semibold">Status</label>
                     <select name="Status" class="form-select">
-                        <option value="draft" selected="@(Model.Status == "draft")">Draft</option>
-                        <option value="published" selected="@(Model.Status == "published")">Published</option>
-                        <option value="archived" selected="@(Model.Status == "archived")">Archived</option>
+                        <option value="draft" selected="@(Model.Status == "draft" ? "selected" : null)">Draft</option>
+                        <option value="published" selected="@(Model.Status == "published" ? "selected" : null)">Published</option>
+                        <option value="archived" selected="@(Model.Status == "archived" ? "selected" : null)">Archived</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -43,7 +43,7 @@
                         <option value="">-- No Category --</option>
                         @foreach (var c in categories)
                         {
-                            <option value="@c.Id" selected="@(Model.CategoryId == c.Id)">@c.Name</option>
+                            <option value="@c.Id" selected="@(Model.CategoryId == c.Id ? "selected" : null)">@c.Name</option>
                         }
                     </select>
                 </div>
@@ -53,7 +53,7 @@
                         <option value="">-- No Brand --</option>
                         @foreach (var b in brands)
                         {
-                            <option value="@b.Id" selected="@(Model.BrandId == b.Id)">@b.Name</option>
+                            <option value="@b.Id" selected="@(Model.BrandId == b.Id ? "selected" : null)">@b.Name</option>
                         }
                     </select>
                 </div>

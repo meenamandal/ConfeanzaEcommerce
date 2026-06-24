@@ -83,8 +83,8 @@
                             {
                                 <tr>
                                     <td>
-                                        <a asp-controller="Products" asp-action="Details" asp-route-slug="@p.Slug" asp-area="" class="text-decoration-none">
-                                            @p.Name.Length > 50 ? p.Name.Substring(0, 50) + "..." : p.Name
+                                        <a asp-area="Admin" asp-controller="Products" asp-action="Details" asp-route-id="@p.Id" class="text-decoration-none fw-semibold">
+                                            @(p.Name.Length > 50 ? p.Name.Substring(0, 50) + "..." : p.Name)
                                         </a>
                                     </td>
                                     <td><small class="text-muted">@(p.Category?.Name ?? "-")</small></td>

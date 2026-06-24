@@ -22,7 +22,7 @@
                     <select name="AffiliateNetwork" class="form-select">
                         @foreach (var n in new[]{"amazon","flipkart","cj","impact","direct","other"})
                         {
-                            <option value="@n" selected="@(Model.AffiliateNetwork == n)">@n.Replace("amazon","Amazon Associates").Replace("flipkart","Flipkart Affiliate").Replace("cj","Commission Junction").Replace("impact","Impact Radius").Replace("direct","Direct").Replace("other","Other")</option>
+                            <option value="@n" selected="@(Model.AffiliateNetwork == n ? "selected" : null)">@n.Replace("amazon","Amazon Associates").Replace("flipkart","Flipkart Affiliate").Replace("cj","Commission Junction").Replace("impact","Impact Radius").Replace("direct","Direct").Replace("other","Other")</option>
                         }
                     </select>
                 </div>

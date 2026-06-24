@@ -33,8 +33,8 @@
                 <div class="col-md-4">
                     <label class="form-label fw-semibold">Status</label>
                     <select name="Status" class="form-select">
-                        <option value="draft" selected="@(Model.Status == "draft")">Draft</option>
-                        <option value="published" selected="@(Model.Status == "published")">Published</option>
+                        <option value="draft" selected="@(Model.Status == "draft" ? "selected" : null)">Draft</option>
+                        <option value="published" selected="@(Model.Status == "published" ? "selected" : null)">Published</option>
                     </select>
                 </div>
                 <div class="col-md-4">

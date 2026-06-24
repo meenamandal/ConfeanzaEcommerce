@@ -23,7 +23,7 @@
                     <select name="StoreId" class="form-select" required>
                         @foreach (var s in stores)
                         {
-                            <option value="@s.Id" selected="@(Model.StoreId == s.Id)">@s.Name</option>
+                            <option value="@s.Id" selected="@(Model.StoreId == s.Id ? "selected" : null)">@s.Name</option>
                         }
                     </select>
                 </div>
@@ -46,9 +46,9 @@
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">Currency</label>
                     <select name="Currency" class="form-select">
-                        <option value="INR" selected="@(Model.Currency == "INR")">INR (₹)</option>
-                        <option value="USD" selected="@(Model.Currency == "USD")">USD ($)</option>
-                        <option value="GBP" selected="@(Model.Currency == "GBP")">GBP (£)</option>
+                        <option value="INR" selected="@(Model.Currency == "INR" ? "selected" : null)">INR (₹)</option>
+                        <option value="USD" selected="@(Model.Currency == "USD" ? "selected" : null)">USD ($)</option>
+                        <option value="GBP" selected="@(Model.Currency == "GBP" ? "selected" : null)">GBP (£)</option>
                     </select>
                 </div>
                 <div class="col-12">
