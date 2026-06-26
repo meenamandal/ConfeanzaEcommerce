@@ -1,0 +1,96 @@
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<!-- Hero -->
+<section class="py-5 text-white" style="background:linear-gradient(135deg,#be185d 0%,#ec4899 60%,#f472b6 100%);">
+    <div class="container py-3 text-center">
+        <span class="badge px-3 py-2 mb-3" style="background:rgba(255,255,255,.18);color:#fce7f3;border:1px solid rgba(255,255,255,.3);border-radius:20px;">
+            <i class="bi bi-shield-lock me-1"></i> Legal
+        </span>
+        <h1 class="display-5 fw-bold mb-2">Privacy Policy</h1>
+        <p class="mb-0" style="color:rgba(255,255,255,.8);">Last updated: June 2026</p>
+    </div>
+</section>
+
+<section class="py-5" style="background:#fdf2f8;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+
+                <!-- Intro -->
+                <div class="bg-white rounded-3 p-4 mb-4 shadow-sm" style="border:1px solid #fce7f3;">
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:42px;height:42px;background:#fce7f3;">
+                            <i class="bi bi-info-circle-fill" style="color:#ec4899;"></i>
+                        </div>
+                        <p class="mb-0 text-muted lh-lg">
+                            ConfeanzaEcommerce ("we", "us", or "our") operates as an affiliate price comparison platform. This Privacy Policy explains how we collect, use, and protect your information when you visit <strong>ConfeanzaEcommerce</strong>. By using our website, you agree to the terms described below.
+                        </p>
+                    </div>
+                </div>
+
+                @{
+                    var sections = new[]
+                    {
+                        new { Icon = "bi-database", Title = "1. Information We Collect", Body = @"<p>We may collect the following types of information:</p>
+                        <ul class='text-muted'>
+                            <li class='mb-1'><strong>Usage Data:</strong> Pages visited, search queries, clicks, browser type, device type, and IP address — collected automatically via analytics tools.</li>
+                            <li class='mb-1'><strong>Contact Information:</strong> If you fill out our contact form, we collect your name, email address, and message content.</li>
+                            <li class='mb-1'><strong>Cookies &amp; Tracking:</strong> We use cookies and similar tracking technologies to improve your experience and track affiliate referral links.</li>
+                        </ul>" },
+                        new { Icon = "bi-gear", Title = "2. How We Use Your Information", Body = @"<ul class='text-muted'>
+                            <li class='mb-1'>To operate and improve our price comparison platform.</li>
+                            <li class='mb-1'>To track affiliate link clicks and report conversion data to partner stores.</li>
+                            <li class='mb-1'>To respond to your contact form enquiries.</li>
+                            <li class='mb-1'>To analyse traffic and usage patterns using Google Analytics.</li>
+                            <li class='mb-1'>To send newsletters or deal alerts if you have subscribed (you can unsubscribe at any time).</li>
+                        </ul>" },
+                        new { Icon = "bi-megaphone", Title = "3. Affiliate Disclosure & Third-Party Links", Body = @"<p class='text-muted'>ConfeanzaEcommerce participates in affiliate programs including <strong>Amazon Associates</strong>, Flipkart Affiliate, Myntra Partner Program, and others. When you click a product link and make a purchase, we may earn a commission.</p>
+                        <p class='text-muted mb-0'>Our website contains links to third-party websites (e.g., Amazon, Flipkart). Once you leave our site, we are not responsible for the privacy practices of those websites. We encourage you to read their privacy policies." },
+                        new { Icon = "bi-cookie", Title = "4. Cookies", Body = @"<p class='text-muted'>We use cookies to:</p>
+                        <ul class='text-muted'>
+                            <li class='mb-1'>Remember your preferences and search history.</li>
+                            <li class='mb-1'>Track affiliate referrals so partner stores can attribute commissions correctly.</li>
+                            <li class='mb-1'>Collect anonymous analytics data via Google Analytics.</li>
+                        </ul>
+                        <p class='text-muted mb-0'>You can disable cookies in your browser settings, but some features of the site may not function correctly." },
+                        new { Icon = "bi-share", Title = "5. Sharing of Information", Body = @"<p class='text-muted'>We do <strong>not sell</strong> your personal information. We may share data with:</p>
+                        <ul class='text-muted'>
+                            <li class='mb-1'><strong>Affiliate Networks:</strong> Click and referral data is shared with partner stores for commission tracking.</li>
+                            <li class='mb-1'><strong>Analytics Providers:</strong> Anonymised usage data is shared with Google Analytics.</li>
+                            <li class='mb-1'><strong>Legal Authorities:</strong> If required by law or court order.</li>
+                        </ul>" },
+                        new { Icon = "bi-lock", Title = "6. Data Security", Body = @"<p class='text-muted mb-0'>We implement reasonable technical and organisational measures to protect your data from unauthorised access, loss, or misuse. However, no internet transmission is 100% secure. We cannot guarantee the absolute security of information transmitted to our site." },
+                        new { Icon = "bi-person-check", Title = "7. Your Rights", Body = @"<p class='text-muted'>You have the right to:</p>
+                        <ul class='text-muted'>
+                            <li class='mb-1'>Access the personal data we hold about you.</li>
+                            <li class='mb-1'>Request correction or deletion of your data.</li>
+                            <li class='mb-1'>Opt out of marketing emails at any time using the unsubscribe link.</li>
+                            <li class='mb-1'>Disable cookies via your browser settings.</li>
+                        </ul>
+                        <p class='text-muted mb-0'>To exercise these rights, email us at <a href='mailto:confeanzatech.official@gmail.com' style='color:#ec4899;'>confeanzatech.official@gmail.com</a>." },
+                        new { Icon = "bi-child", Title = "8. Children's Privacy", Body = @"<p class='text-muted mb-0'>ConfeanzaEcommerce is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe your child has provided us with personal data, please contact us and we will delete it promptly." },
+                        new { Icon = "bi-arrow-repeat", Title = "9. Changes to This Policy", Body = @"<p class='text-muted mb-0'>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated date. Continued use of the website after changes constitutes acceptance of the revised policy." },
+                        new { Icon = "bi-envelope", Title = "10. Contact", Body = @"<p class='text-muted mb-0'>For any privacy-related questions, please contact us at:<br>
+                        <a href='mailto:confeanzatech.official@gmail.com' style='color:#ec4899;'>confeanzatech.official@gmail.com</a>" },
+                    };
+                }
+
+                @foreach (var s in sections)
+                {
+                    <div class="bg-white rounded-3 p-4 mb-4 shadow-sm" style="border:1px solid #fce7f3;">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:38px;height:38px;background:#fce7f3;">
+                                <i class="bi @s.Icon" style="color:#ec4899;"></i>
+                            </div>
+                            <h5 class="fw-bold mb-0" style="color:#1e1b4b;">@s.Title</h5>
+                        </div>
+                        @Html.Raw(s.Body)
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>

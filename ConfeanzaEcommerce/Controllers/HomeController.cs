@@ -2,16 +2,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ConfeanzaEcommerce.Data;
 using ConfeanzaEcommerce.Models.ViewModels;
+using ConfeanzaEcommerce.Services;
 
 namespace ConfeanzaEcommerce.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _db;
+    private readonly EmailService _email;
 
-    public HomeController(ApplicationDbContext db)
+    public HomeController(ApplicationDbContext db, EmailService email)
     {
         _db = db;
+        _email = email;
     }
 
     public async Task<IActionResult> Index()
@@ -57,6 +60,42 @@ public class HomeController : Controller
     }
 
     public IActionResult Privacy() => View();
+
+    [Route("about-us")]
+    public IActionResult AboutUs() => View();
+
+    [Route("contact-us")]
+    public IActionResult ContactUs() => View();
+
+    [HttpPost("contact-us")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ContactUs(string name, string email, string subject, string message)
+    {
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email)
+            || string.IsNullOrWhiteSpace(subject) || string.IsNullOrWhiteSpace(message))
+        {
+            TempData["ContactError"] = "Please fill in all fields before sending.";
+            return View();
+        }
+
+        try
+        {
+            await _email.SendContactFormAsync(name, email, subject, message);
+            TempData["ContactSuccess"] = "Your message has been sent! We'll reply within 1 business day.";
+        }
+        catch (Exception ex)
+        {
+            TempData["ContactError"] = $"Failed to send: {ex.Message}";
+        }
+
+        return RedirectToAction(nameof(ContactUs));
+    }
+
+    [Route("privacy-policy")]
+    public IActionResult PrivacyPolicy() => View();
+
+    [Route("terms-and-conditions")]
+    public IActionResult TermsAndConditions() => View();
 
     [Route("error")]
     public IActionResult Error() => View();

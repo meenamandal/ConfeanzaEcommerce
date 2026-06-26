@@ -127,6 +127,15 @@
                         <li class="mb-1"><a class="footer-nav-link" asp-controller="Stores" asp-action="Index">View All</a></li>
                     </ul>
                 </div>
+                <div class="col-md-2">
+                    <h6 class="fw-bold mb-3" style="color:#f9a8d4;">Company</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a class="footer-nav-link" asp-controller="Home" asp-action="AboutUs">About Us</a></li>
+                        <li class="mb-1"><a class="footer-nav-link" asp-controller="Home" asp-action="ContactUs">Contact Us</a></li>
+                        <li class="mb-1"><a class="footer-nav-link" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a></li>
+                        <li class="mb-1"><a class="footer-nav-link" asp-controller="Home" asp-action="TermsAndConditions">Terms &amp; Conditions</a></li>
+                    </ul>
+                </div>
                 <div class="col-md-4">
                     <h6 class="fw-bold mb-3" style="color:#f9a8d4;">Stay Updated</h6>
                     <p class="small" style="color:rgba(255,255,255,.65);">Get the latest deals &amp; price alerts in your inbox.</p>
@@ -140,7 +149,12 @@
             <hr class="mt-4" style="border-color: rgba(236,72,153,.25);" />
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <p class="small mb-0" style="color:rgba(255,255,255,.5);">&copy; 2026 ConfeanzaEcommerce. All rights reserved.</p>
-                <p class="small mb-0" style="color:rgba(255,255,255,.5);">Made with <span style="color:#f9a8d4;">♥</span> in India</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a class="footer-nav-link small" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a>
+                    <a class="footer-nav-link small" asp-controller="Home" asp-action="TermsAndConditions">Terms &amp; Conditions</a>
+                    <a class="footer-nav-link small" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                    <a class="footer-nav-link small" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
+                </div>
             </div>
         </div>
     </footer>

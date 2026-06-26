@@ -1,0 +1,90 @@
+@{
+    ViewData["Title"] = "Terms & Conditions";
+}
+
+<!-- Hero -->
+<section class="py-5 text-white" style="background:linear-gradient(135deg,#be185d 0%,#ec4899 60%,#f472b6 100%);">
+    <div class="container py-3 text-center">
+        <span class="badge px-3 py-2 mb-3" style="background:rgba(255,255,255,.18);color:#fce7f3;border:1px solid rgba(255,255,255,.3);border-radius:20px;">
+            <i class="bi bi-file-earmark-text me-1"></i> Legal
+        </span>
+        <h1 class="display-5 fw-bold mb-2">Terms &amp; Conditions</h1>
+        <p class="mb-0" style="color:rgba(255,255,255,.8);">Last updated: June 2026</p>
+    </div>
+</section>
+
+<section class="py-5" style="background:#fdf2f8;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+
+                <!-- Intro -->
+                <div class="bg-white rounded-3 p-4 mb-4 shadow-sm" style="border:1px solid #fce7f3;">
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:42px;height:42px;background:#fce7f3;">
+                            <i class="bi bi-info-circle-fill" style="color:#ec4899;"></i>
+                        </div>
+                        <p class="mb-0 text-muted lh-lg">
+                            Please read these Terms &amp; Conditions carefully before using ConfeanzaEcommerce. By accessing or using our website, you agree to be bound by these terms. If you do not agree, please do not use this site.
+                        </p>
+                    </div>
+                </div>
+
+                @{
+                    var sections = new[]
+                    {
+                        new { Icon = "bi-globe", Title = "1. About the Platform", Body = @"<p class='text-muted mb-0'>ConfeanzaEcommerce is an <strong>affiliate price comparison website</strong>. We aggregate product listings, prices, coupons, and deals from third-party e-commerce platforms such as Amazon, Flipkart, Myntra, and others. We do not sell products directly. All purchases are made on the respective retailer's website." },
+
+                        new { Icon = "bi-megaphone", Title = "2. Affiliate Disclaimer", Body = @"<p class='text-muted'>This website contains affiliate links. When you click a link and make a qualifying purchase, ConfeanzaEcommerce may earn an affiliate commission from the retailer at <strong>no additional cost to you</strong>.</p>
+                        <p class='text-muted mb-0'>We are a participant in the <strong>Amazon Associates Program</strong>, the Flipkart Affiliate Program, and other affiliate programs. Our editorial content and product recommendations are not influenced by affiliate relationships — we aim to show you the best available options regardless of commission rates." },
+
+                        new { Icon = "bi-currency-rupee", Title = "3. Price Accuracy", Body = @"<p class='text-muted'>Prices, availability, and offer details displayed on ConfeanzaEcommerce are sourced from partner retailers and may not always reflect real-time data. Prices can change without notice.</p>
+                        <p class='text-muted mb-0'><strong>We do not guarantee the accuracy of any price shown.</strong> Always verify the final price on the retailer's website before completing a purchase. ConfeanzaEcommerce is not responsible for any discrepancies between the price shown on our site and the price charged at checkout." },
+
+                        new { Icon = "bi-ticket-perforated", Title = "4. Coupons & Deals", Body = @"<p class='text-muted'>We make every effort to verify coupons and deals before listing them. However, coupons may expire, have usage limits, or be subject to conditions set by the retailer.</p>
+                        <p class='text-muted mb-0'>ConfeanzaEcommerce does not guarantee that any coupon or deal will work at the time of use. We are not responsible for any failed coupon redemptions or deals that are no longer available." },
+
+                        new { Icon = "bi-box-arrow-up-right", Title = "5. Third-Party Websites", Body = @"<p class='text-muted'>Our website contains links to external websites operated by third parties (retailers, affiliate networks). These links are provided for your convenience.</p>
+                        <p class='text-muted mb-0'>ConfeanzaEcommerce has no control over the content, privacy practices, or terms of third-party websites. Clicking an affiliate link and leaving our site means you are subject to the terms and privacy policy of that third-party website. We are not responsible for any loss or damage arising from your use of third-party sites." },
+
+                        new { Icon = "bi-c-circle", Title = "6. Intellectual Property", Body = @"<p class='text-muted mb-0'>All content on ConfeanzaEcommerce — including text, graphics, logos, images, and page layouts — is the property of ConfeanzaEcommerce or its content suppliers and is protected by applicable copyright laws. You may not reproduce, distribute, or create derivative works without our express written permission. Product images shown belong to their respective retailers and brands." },
+
+                        new { Icon = "bi-person-lock", Title = "7. User Conduct", Body = @"<p class='text-muted'>By using this website, you agree not to:</p>
+                        <ul class='text-muted'>
+                            <li class='mb-1'>Use the site for any unlawful purpose.</li>
+                            <li class='mb-1'>Scrape, crawl, or copy content without permission.</li>
+                            <li class='mb-1'>Attempt to interfere with the security or functionality of the platform.</li>
+                            <li class='mb-1'>Post or transmit any misleading, harmful, or offensive content via our contact form.</li>
+                        </ul>" },
+
+                        new { Icon = "bi-exclamation-triangle", Title = "8. Disclaimer of Warranties", Body = @"<p class='text-muted mb-0'>ConfeanzaEcommerce is provided on an <strong>'as is'</strong> and <strong>'as available'</strong> basis without warranties of any kind, express or implied. We do not warrant that the website will be uninterrupted, error-free, or free of viruses. Use of the website is at your own risk." },
+
+                        new { Icon = "bi-shield-x", Title = "9. Limitation of Liability", Body = @"<p class='text-muted mb-0'>To the maximum extent permitted by law, ConfeanzaEcommerce and its operators shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform — including but not limited to losses from incorrect prices, failed coupons, or purchases made via affiliate links." },
+
+                        new { Icon = "bi-geo-alt", Title = "10. Governing Law", Body = @"<p class='text-muted mb-0'>These Terms &amp; Conditions are governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Noida, Uttar Pradesh, India." },
+
+                        new { Icon = "bi-arrow-repeat", Title = "11. Changes to Terms", Body = @"<p class='text-muted mb-0'>We reserve the right to modify these Terms &amp; Conditions at any time. Changes will be posted on this page with an updated date. Continued use of the website after any changes constitutes your acceptance of the new terms." },
+
+                        new { Icon = "bi-envelope", Title = "12. Contact Us", Body = @"<p class='text-muted mb-0'>If you have questions about these Terms &amp; Conditions, please contact us:<br>
+                        <a href='mailto:confeanzatech.official@gmail.com' style='color:#ec4899;'>confeanzatech.official@gmail.com</a><br>
+                        <a href='tel:+15055852851' style='color:#ec4899;'>+1 (505) 585-2851</a>" },
+                    };
+                }
+
+                @foreach (var s in sections)
+                {
+                    <div class="bg-white rounded-3 p-4 mb-4 shadow-sm" style="border:1px solid #fce7f3;">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:38px;height:38px;background:#fce7f3;">
+                                <i class="bi @s.Icon" style="color:#ec4899;"></i>
+                            </div>
+                            <h5 class="fw-bold mb-0" style="color:#1e1b4b;">@s.Title</h5>
+                        </div>
+                        @Html.Raw(s.Body)
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
