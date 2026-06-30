@@ -1,0 +1,21 @@
+@using ConfeanzaEcommerce.ViewComponents
+@model List<CategoryDropdownItem>
+
+<li><a class="dropdown-item fw-semibold" asp-controller="Categories" asp-action="Index">
+    <i class="bi bi-grid-3x3-gap me-2" style="color:#ec4899;"></i>All Categories
+</a></li>
+<li><hr class="dropdown-divider my-1"></li>
+@foreach (var cat in Model)
+{
+    var img = !string.IsNullOrEmpty(cat.ImageUrl) ? cat.ImageUrl
+              : !string.IsNullOrEmpty(cat.IconUrl) ? cat.IconUrl
+              : "/uploads/categories/placeholder.svg";
+    <li>
+        <a class="dropdown-item d-flex align-items-center gap-2"
+           asp-controller="Categories" asp-action="Details" asp-route-slug="@cat.Slug">
+            <img src="@img" alt="@cat.Name"
+                 style="width:32px;height:32px;object-fit:contain;border-radius:6px;background:#fdf4ff;flex-shrink:0;" />
+            <span class="small">@cat.Name</span>
+        </a>
+    </li>
+}

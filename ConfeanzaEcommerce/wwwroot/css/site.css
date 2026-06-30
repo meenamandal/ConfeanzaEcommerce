@@ -135,6 +135,25 @@ h2.section-title::after {
 footer.site-footer { background: #3b0a25; }
 footer.site-footer a:hover { color: #f9a8d4 !important; }
 
+/* ── Category circle cards ── */
+.cat-circle-wrap {
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+.cat-circle-wrap:hover { transform: translateY(-5px); }
+.cat-circle-wrap:hover .cat-circle {
+    box-shadow: 0 8px 24px rgba(236,72,153,.28) !important;
+    border-color: var(--pink) !important;
+}
+.cat-circle {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff;
+    border: 3px solid var(--pink-light);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
 /* ── Misc ── */
 .border-dashed  { border-style: dashed !important; }
 .hover-bg:hover { background: var(--pink-light); }

@@ -108,7 +108,19 @@
             <!-- Price Comparison -->
             @if (Model.AffiliateLinks.Any())
             {
+                var showVisitStore = Model.Product.ShowVisitStore;
+                var activeNotice = Model.ActiveNotice;
                 <h5 class="fw-bold mt-4 mb-3"><i class="bi bi-bar-chart-line text-primary"></i> Compare Prices</h5>
+
+                @if (showVisitStore && !string.IsNullOrWhiteSpace(activeNotice))
+                {
+                    <div class="alert d-flex align-items-start gap-2 mb-3"
+                         style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;color:#7c5700;">
+                        <i class="bi bi-info-circle-fill mt-1 flex-shrink-0" style="color:#f59e0b;"></i>
+                        <span>@activeNotice</span>
+                    </div>
+                }
+
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-0">
                         @foreach (var link in Model.AffiliateLinks.Where(a => a.IsActive && a.InStock).OrderBy(a => a.Price))
@@ -125,6 +137,13 @@
                                     @if (link.Price.HasValue)
                                     {
                                         <span class="fw-bold text-success fs-5">₹@link.Price.Value.ToString("N0")</span>
+                                    }
+                                    @if (showVisitStore)
+                                    {
+                                        <a href="@link.AffiliateUrl" target="_blank" rel="nofollow noopener"
+                                           class="btn btn-primary btn-sm fw-semibold">
+                                            Visit Store <i class="bi bi-arrow-right"></i>
+                                        </a>
                                     }
                                     <a href="@link.AffiliateUrl" target="_blank" rel="nofollow noopener"
                                        class="btn btn-warning btn-sm fw-semibold">

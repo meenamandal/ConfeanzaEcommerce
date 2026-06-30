@@ -18,6 +18,7 @@ public class Category
     [Column("is_featured")] public bool IsFeatured { get; set; } = false;
     [Column("meta_title")] public string? MetaTitle { get; set; }
     [Column("meta_description")] public string? MetaDescription { get; set; }
+    [Column("page_notice")] public string? PageNotice { get; set; }
     [Column("created_at")] public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [Column("updated_at")] public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 

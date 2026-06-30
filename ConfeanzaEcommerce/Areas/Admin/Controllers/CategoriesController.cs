@@ -9,7 +9,13 @@ namespace ConfeanzaEcommerce.Areas.Admin.Controllers;
 public class CategoriesController : Controller
 {
     private readonly ApplicationDbContext _db;
-    public CategoriesController(ApplicationDbContext db) => _db = db;
+    private readonly IWebHostEnvironment _env;
+
+    public CategoriesController(ApplicationDbContext db, IWebHostEnvironment env)
+    {
+        _db = db;
+        _env = env;
+    }
 
     public async Task<IActionResult> Index()
     {
@@ -21,11 +27,15 @@ public class CategoriesController : Controller
     public IActionResult Create() => View(new Category());
 
     [HttpPost] [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Category model)
+    public async Task<IActionResult> Create(Category model, IFormFile? imageFile)
     {
         model.Id = Guid.NewGuid().ToString();
         model.Slug = Slugify(model.Name);
         model.CreatedAt = model.UpdatedAt = DateTime.UtcNow;
+
+        if (imageFile != null && imageFile.Length > 0)
+            model.ImageUrl = await SaveImage(imageFile, model.Id);
+
         _db.Categories.Add(model);
         await _db.SaveChangesAsync();
         TempData["Success"] = "Category created.";
@@ -40,20 +50,24 @@ public class CategoriesController : Controller
     }
 
     [HttpPost] [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, Category model)
+    public async Task<IActionResult> Edit(string id, Category model, IFormFile? imageFile)
     {
         var cat = await _db.Categories.FindAsync(id);
         if (cat == null) return NotFound();
+
         cat.Name = model.Name;
         cat.Description = model.Description;
-        cat.IconUrl = model.IconUrl;
-        cat.ImageUrl = model.ImageUrl;
         cat.SortOrder = model.SortOrder;
         cat.IsActive = model.IsActive;
         cat.IsFeatured = model.IsFeatured;
         cat.MetaTitle = model.MetaTitle;
         cat.MetaDescription = model.MetaDescription;
+        cat.PageNotice = string.IsNullOrWhiteSpace(model.PageNotice) ? null : model.PageNotice.Trim();
         cat.UpdatedAt = DateTime.UtcNow;
+
+        if (imageFile != null && imageFile.Length > 0)
+            cat.ImageUrl = await SaveImage(imageFile, id);
+
         await _db.SaveChangesAsync();
         TempData["Success"] = "Category updated.";
         return RedirectToAction(nameof(Index));
@@ -66,6 +80,25 @@ public class CategoriesController : Controller
         if (cat != null) { _db.Categories.Remove(cat); await _db.SaveChangesAsync(); }
         TempData["Success"] = "Category deleted.";
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task<string> SaveImage(IFormFile file, string categoryId)
+    {
+        var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp", ".svg" };
+        var ext = Path.GetExtension(file.FileName).ToLower();
+        if (!allowed.Contains(ext)) return "";
+
+        var dir = Path.Combine(_env.WebRootPath, "uploads", "categories");
+        Directory.CreateDirectory(dir);
+
+        foreach (var old in Directory.GetFiles(dir, $"{categoryId}.*"))
+            System.IO.File.Delete(old);
+
+        var filePath = Path.Combine(dir, $"{categoryId}{ext}");
+        using var stream = new FileStream(filePath, FileMode.Create);
+        await file.CopyToAsync(stream);
+
+        return $"/uploads/categories/{categoryId}{ext}";
     }
 
     private static string Slugify(string text) =>

@@ -19,6 +19,7 @@ public class Product
     [Column("is_featured")] public bool IsFeatured { get; set; } = false;
     [Column("is_trending")] public bool IsTrending { get; set; } = false;
     [Column("is_deal_of_day")] public bool IsDealOfDay { get; set; } = false;
+    [Column("show_visit_store")] public bool ShowVisitStore { get; set; } = false;
     [Column("lowest_price")] public decimal? LowestPrice { get; set; }
     [Column("highest_price")] public decimal? HighestPrice { get; set; }
     [Column("avg_rating")] public decimal AvgRating { get; set; } = 0;

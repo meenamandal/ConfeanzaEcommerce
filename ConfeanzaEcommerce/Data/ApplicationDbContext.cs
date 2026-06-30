@@ -19,6 +19,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Blog> Blogs => Set<Blog>();
     public DbSet<Coupon> Coupons => Set<Coupon>();
     public DbSet<Deal> Deals => Set<Deal>();
+    public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

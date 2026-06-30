@@ -36,4 +36,8 @@ public class ProductDetailViewModel
     public List<Review> Reviews { get; set; } = new();
     public List<Product> RelatedProducts { get; set; } = new();
     public AffiliateLink? BestPrice => AffiliateLinks.Where(a => a.IsActive && a.InStock).OrderBy(a => a.Price).FirstOrDefault();
+    public string? ProductPageNotice { get; set; }
+    public string? CategoryNotice { get; set; }
+    // Category notice takes priority; falls back to global notice
+    public string? ActiveNotice => !string.IsNullOrWhiteSpace(CategoryNotice) ? CategoryNotice : ProductPageNotice;
 }

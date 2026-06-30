@@ -20,6 +20,7 @@
         <table class="table table-hover mb-0">
             <thead class="table-light">
                 <tr>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Slug</th>
                     <th>Sort</th>
@@ -33,6 +34,10 @@
                 @foreach (var cat in Model)
                 {
                     <tr>
+                        <td>
+                            <img src="@(!string.IsNullOrEmpty(cat.ImageUrl) ? cat.ImageUrl : "/uploads/categories/placeholder.svg")"
+                                 alt="@cat.Name" style="width:48px;height:48px;object-fit:contain;border-radius:8px;background:#fdf4ff;" />
+                        </td>
                         <td class="fw-semibold">@cat.Name</td>
                         <td><code class="small">@cat.Slug</code></td>
                         <td>@cat.SortOrder</td>

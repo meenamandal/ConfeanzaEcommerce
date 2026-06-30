@@ -27,6 +27,7 @@ using (var scope = app.Services.CreateScope())
         "ALTER TABLE `affiliate_links` MODIFY COLUMN `currency`  VARCHAR(10) NOT NULL DEFAULT 'INR'",
         "ALTER TABLE `blogs`          DROP FOREIGN KEY `fk_blog_author`",
         "ALTER TABLE `blogs`          MODIFY COLUMN `author_id`  VARCHAR(100) NULL",
+        "ALTER TABLE `categories`     ADD COLUMN `page_notice`   TEXT NULL",
     };
     foreach (var sql in fixes)
     {

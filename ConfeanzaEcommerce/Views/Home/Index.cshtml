@@ -89,11 +89,17 @@
                 {
                     <div class="col-6 col-md-3 col-lg-2">
                         <a asp-controller="Categories" asp-action="Details" asp-route-slug="@cat.Slug" class="text-decoration-none">
-                            <div class="card border-0 shadow-sm text-center h-100 card-hover">
-                                <div class="card-body py-3">
-                                    <div class="fs-2 mb-2" style="color:#ec4899;"><i class="bi bi-grid"></i></div>
-                                    <p class="mb-0 fw-semibold small">@cat.Name</p>
+                            <div class="text-center cat-circle-wrap">
+                                @{
+                                    var catImg = !string.IsNullOrEmpty(cat.ImageUrl) ? cat.ImageUrl
+                                                 : !string.IsNullOrEmpty(cat.IconUrl) ? cat.IconUrl
+                                                 : "/uploads/categories/placeholder.svg";
+                                }
+                                <div class="cat-circle mx-auto shadow-sm">
+                                    <img src="@catImg" alt="@cat.Name"
+                                         style="width:100%;height:100%;object-fit:cover;" />
                                 </div>
+                                <p class="mb-0 fw-semibold small mt-2 text-dark">@cat.Name</p>
                             </div>
                         </a>
                     </div>

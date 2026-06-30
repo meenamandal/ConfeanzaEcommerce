@@ -90,6 +90,7 @@ public class ProductsController : Controller
         product.IsFeatured = model.IsFeatured;
         product.IsTrending = model.IsTrending;
         product.IsDealOfDay = model.IsDealOfDay;
+        product.ShowVisitStore = model.ShowVisitStore;
         product.Sku = model.Sku;
         product.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();

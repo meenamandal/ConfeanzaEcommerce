@@ -79,12 +79,16 @@ public class ProductsController : Controller
             .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id && p.Status == "published" && p.DeletedAt == null)
             .Take(6).ToListAsync();
 
+        var settings = await _db.SiteSettings.FirstOrDefaultAsync();
+
         var vm = new ProductDetailViewModel
         {
             Product = product,
             AffiliateLinks = product.AffiliateLinks.ToList(),
             Reviews = product.Reviews.Where(r => r.Status == "approved").OrderByDescending(r => r.CreatedAt).ToList(),
-            RelatedProducts = related
+            RelatedProducts = related,
+            ProductPageNotice = string.IsNullOrWhiteSpace(settings?.ProductPageNotice) ? null : settings.ProductPageNotice,
+            CategoryNotice = string.IsNullOrWhiteSpace(product.Category?.PageNotice) ? null : product.Category!.PageNotice
         };
 
         return View(vm);

@@ -58,8 +58,8 @@
                         <a class="nav-link fw-medium dropdown-toggle" href="#" data-bs-toggle="dropdown" style="color:#be185d;">
                             <i class="bi bi-grid-3x3-gap"></i> Categories
                         </a>
-                        <ul class="dropdown-menu border-0 shadow">
-                            <li><a class="dropdown-item" asp-controller="Categories" asp-action="Index">All Categories</a></li>
+                        <ul class="dropdown-menu border-0 shadow" style="max-height:420px;overflow-y:auto;min-width:220px;">
+                            @await Component.InvokeAsync("CategoriesDropdown")
                         </ul>
                     </li>
                     <li class="nav-item">
